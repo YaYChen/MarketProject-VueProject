@@ -1,0 +1,16 @@
+{
+  "language": {
+    "name": "中文"
+  },
+  "navbar": {
+    "home": "首页",
+    "shoppingList":"购物清单",
+    "manager":"管理",
+    "managers":{
+      "product":"商品管理",
+      "list":"清单管理",
+      "storge":"库存管理",
+      "supplier":"供应商管理"
+    }
+  }
+}

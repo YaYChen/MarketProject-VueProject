@@ -1,0 +1,16 @@
+{
+  "language": {
+    "name": "English"
+  },
+  "navbar": {
+    "home": "Home",
+    "shoppingList":"Shopping List",
+    "manager":"Manager",
+    "managers":{
+      "product":"Product Manager",
+      "list":"List Manager",
+      "storge":"Storge Manager",
+      "supplier":"Supplier Manager"
+    }
+  }
+}
