@@ -112,13 +112,14 @@ export default {
   height: auto;
   width: 100%;
   margin-bottom: 10px;
-  border-bottom: 2px solid black;
+  border-top: 3px solid black;
+  border-bottom: 1px solid gray;
   padding: 1px;
   text-align: center;
 }
 .layout_box {
   margin: 0 auto;
-  width: 1100px;
+  width: 1200px;
   height: 70px;
 }
 .header_logo {
@@ -147,11 +148,11 @@ export default {
   height: 100%;
 }
 .header_globalization {
-  width: 99px;
   height: 100%;
+  width: 199;
   float: left;
   border-left: 1px solid gray;
-  margin: 0 auto;
+  padding-left: 10px;
 }
 .header_globalization span {
   display: block;
@@ -162,7 +163,6 @@ export default {
   font-size: 20px;
   line-height: 65px;
   height: 100%;
-  width: 99px;
 }
 .el-icon-arrow-down {
   font-size: 20px;
