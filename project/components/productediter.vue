@@ -8,76 +8,44 @@
         @:handleAvatarSuccess="handleAvatarSuccess"
       />
     </div>
-    <div class="product_detial_box">
-      <form>
-        <div class="form-group">
-          <label>Name:</label>
-          <input
-            id="input_name"
-            v-model="product.name"
-            type="text"
-            class="form-control"
-            placeholder="Enter Name"
-          >
-        </div>
-        <div class="form-group">
-          <label>Category:</label>
-          <el-select
-            v-model="selectValue"
-            class="form_select"
-            placeholder="Category select..."
-            @change="selectChange"
-          >
-            <el-option
-              v-for="item in selectCategories"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </div>
-        <div class="form-group">
-          <label>Specification:</label>
-          <input
-            id="input_specification"
-            v-model="product.specification"
-            type="text"
-            class="form-control"
-            placeholder="Enter Specification"
-          >
-        </div>
-        <div class="form-group">
-          <label>PurchasePrice:</label>
-          <input
-            id="input_purchasePrice"
-            v-model="product.purchasePrice"
-            type="text"
-            class="form-control"
-            placeholder="Enter PurchasePrice"
-          >
-        </div>
-        <div class="form-group">
-          <label>Price:</label>
-          <input
-            id="input_price"
-            v-model="product.price"
-            type="text"
-            class="form-control"
-            placeholder="Enter Price"
-          >
-        </div>
-        <button 
-          type="submit" 
-          class="btn btn-primary" 
+    <el-form
+      :model="product" 
+      label-position="top" 
+      label-width="80px" 
+    >
+      <el-form-item label="名称：">
+        <el-input v-model="product.name"/>
+      </el-form-item>
+      <el-form-item label="类别：">
+        <el-select
+          v-model="product.category"
+          placeholder="Category select..."
+        >
+          <el-option
+            v-for="item in selectCategories"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="规格：">
+        <el-input v-model="product.specification"/>
+      </el-form-item>
+      <el-form-item label="进价：">
+        <el-input v-model="product.purchasePrice"/>
+      </el-form-item>
+      <el-form-item label="售价：">
+        <el-input v-model="product.price"/>
+      </el-form-item>
+      <el-form-item>
+        <el-button 
+          type="primary" 
           @click="submit"
-        >submit</button>
-        <button 
-          type="button" 
-          class="btn btn-primary" 
-          @click="cancel"
-        >cancle</button>
-      </form>
-    </div>
+        >立即创建</el-button>
+        <el-button @click="resetForm">重置</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
@@ -99,9 +67,47 @@ export default {
   },
   data: function() {
     return {
+      orginalProduct: '',
       selectCategories: [],
       selectValue: '',
-      imgFileName: ''
+      imgFileName: '',
+      rules: {
+        name: [
+          {
+            required: true,
+            message: '请输入商品名称',
+            trigger: 'blur'
+          }
+        ],
+        category: [
+          {
+            required: true,
+            message: '请输入商品类别',
+            trigger: 'blur'
+          }
+        ],
+        specification: [
+          {
+            required: true,
+            message: '请输入商品规格',
+            trigger: 'blur'
+          }
+        ],
+        purchasePrice: [
+          {
+            required: true,
+            message: '请输入商品进价',
+            trigger: 'blur'
+          }
+        ],
+        price: [
+          {
+            required: true,
+            message: '请输入商品售价',
+            trigger: 'blur'
+          }
+        ]
+      }
     }
   },
   created: function() {
@@ -120,6 +126,7 @@ export default {
       .catch(function(error) {
         alert(error)
       })
+    vm.orginalProduct = vm.product
   },
   methods: {
     submit: function() {
@@ -165,6 +172,9 @@ export default {
       } catch (error) {
         alert(error.message)
       }
+    },
+    resetForm: function() {
+      this.product = this.orginalProduct
     },
     cancel: function() {
       this.$emit('disableEditer')
