@@ -28,11 +28,5 @@
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-prettier": "2.6.2",
     "prettier": "1.14.3"
-  },
-  "config": {
-    "nuxt": {
-      "host": "0.0.0.0",
-      "port": "9080"
-    }
   }
 }
