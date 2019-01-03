@@ -2,7 +2,7 @@
   <div class="product_box">
     <div class="product_picture_box">
       <img 
-        :src="product.productPicture" 
+        :src="'file:///'+product.productPicture"
         class="img_picture"
       >
     </div>
@@ -11,7 +11,7 @@
         <div class="show_detail_info_title">品名:</div>
         <div class="show_detail_info_value">{{ product.name }}</div>
         <div class="show_detail_info_title">类别:</div>
-        <div class="show_detail_info_value">{{ product.category }}</div>
+        <div class="show_detail_info_value">{{ product.category.name }}</div>
         <div class="show_detail_info_title">规格:</div>
         <div class="show_detail_info_value">{{ product.specification }}</div>
       </div>
@@ -50,17 +50,17 @@ export default {
 }
 
 .product_picture_box {
-  width: 299px;
+  width: 298px;
   height: 298px;
   padding: 2px;
   float: left;
 }
 
 .product_detail_box {
-  width: 699px;
+  width: 700px;
   height: 298px;
   padding: 2px;
-  float: left;
+  margin-left: 299px;
 }
 
 .img_picture {
@@ -84,24 +84,22 @@ export default {
   height: 294px;
   width: 394px;
   text-align: left;
-  float: left;
+  display: inline-block;
 }
 
 .show_detail_info_title {
-  height: auto;
-  width: 297px;
+  height: 40px;
+  line-height: 40px;
   font-family: 'Microsoft YaHei';
-  font-size: 30px;
-  margin: 1px;
+  font-size: 20px;
+  color: gray;
 }
 
 .show_detail_info_value {
-  height: auto;
-  width: 297px;
+  height: 50px;
+  line-height: 50px;
   font-family: 'Microsoft YaHei';
   font-size: 30px;
-  margin: 1px;
-  border-bottom: 1px solid black;
 }
 
 .show_price_title {

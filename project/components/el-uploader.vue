@@ -30,8 +30,8 @@ export default {
     return {}
   },
   methods: {
-    handleAvatarSuccess(res, file) {
-      alert('Upload img success!')
+    handleAvatarSuccess(response, file) {
+      console.log(response)
       this.imageUrl = URL.createObjectURL(file.raw)
       this.$emit('handleAvatarSuccess', file.name, this.imageUrl)
     },

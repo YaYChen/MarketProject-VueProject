@@ -5,7 +5,7 @@
         <el-input
           v-model="barcode"
           placeholder="Input barcode,please..."
-          @keyup.enter="inputListener"
+          @keyup.enter.native="inputListener"
         >
           <el-button 
             slot="append" 
@@ -55,7 +55,7 @@ export default {
         .then(function(response) {
           vm.showProduct = true
           vm.product = response.data
-          vm.$refs.input_search.value = ''
+          vm.barcode = ''
         })
         .catch(function(error) {
           console.log(error)

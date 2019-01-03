@@ -5,7 +5,7 @@
         <el-input
           v-model="barcode"
           placeholder="Input barcode,please..."
-          @keyup.enter="inputListener"
+          @keyup.enter.native="inputListener"
         >
           <el-button 
             slot="append" 
@@ -49,7 +49,6 @@ export default {
   methods: {
     inputListener: function() {
       var vm = this
-      vm.showProduct = true
       this.$axios
         .get('/product-ByCode', {
           params: {
@@ -57,7 +56,7 @@ export default {
           }
         })
         .then(function(response) {
-          if (response.data == '') {
+          if (response.data === '') {
             // "",[]
             vm.update = false
             vm.product = {
@@ -74,9 +73,9 @@ export default {
           } else {
             vm.update = true
             vm.product = response.data
-            vm.id = vm.product.id
           }
           vm.barcode = ''
+          vm.showProduct = true
         })
         .catch(function(error) {
           console.log(error)

@@ -2,11 +2,23 @@
   <div class="product_editer_box">
     <div class="img_upload_box">
       <label>Product Picture Upload:</label>
-      <uploader-component
-        id="imgUpload"
-        :imageurl="product.productPicture"
-        @:handleAvatarSuccess="handleAvatarSuccess"
-      />
+      <el-upload
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload"
+        class="avatar-uploader"
+        action="http://localhost:8080/upload-img"
+      >
+        <img 
+          v-if="imageUrl" 
+          :src="imageUrl" 
+          class="avatar"
+        >
+        <i 
+          v-else 
+          class="el-icon-plus avatar-uploader-icon"
+        />
+      </el-upload>
     </div>
     <el-form
       :model="product" 
@@ -18,7 +30,7 @@
       </el-form-item>
       <el-form-item label="类别：">
         <el-select
-          v-model="product.category"
+          v-model="selectValue"
           placeholder="Category select..."
         >
           <el-option
@@ -50,11 +62,7 @@
 </template>
 
 <script>
-import uploaderComponent from '@/components/el-uploader.vue'
 export default {
-  components: {
-    'uploader-component': uploaderComponent
-  },
   props: {
     product: {
       type: Object,
@@ -70,7 +78,7 @@ export default {
       orginalProduct: '',
       selectCategories: [],
       selectValue: '',
-      imgFileName: '',
+      imageUrl: '',
       rules: {
         name: [
           {
@@ -116,58 +124,54 @@ export default {
       .get('/getCategories')
       .then(response => {
         vm.selectCategories = response.data
-        if (
-          vm.product.category.id !== '' ||
-          vm.product.category.id !== undefined
-        ) {
-          vm.selectValue = vm.product.category.id
-        }
       })
       .catch(function(error) {
         alert(error)
       })
     vm.orginalProduct = vm.product
+    vm.selectValue = vm.product.category.id
+    vm.imageUrl = vm.productPicture
   },
   methods: {
     submit: function() {
       try {
         var vm = this
         if (this.update == true) {
-          if (vm.imgFileName === '') {
+          if (vm.product.productPicture === '') {
             alert('Please upload img...')
           } else {
-            vm.product.productPicture = vm.imgFileName
+            var postData = JSON.stringify(vm.product)
+            this.$axios
+              .post('/update-product', postData, {
+                headers: {
+                  'Content-Type': 'application/json;charset=UTF-8'
+                }
+              })
+              .then(response => {
+                alert(response.data.message)
+              })
+              .catch(function(error) {
+                alert(error)
+              })
           }
-          var postData = JSON.stringify(vm.product)
-          this.$axios
-            .post('/update-product', postData, {
-              headers: {
-                'Content-Type': 'application/json;charset=UTF-8'
-              }
-            })
-            .then(response => {
-              alert(response.data.message)
-            })
-            .catch(function(error) {
-              alert(error)
-            })
         } else {
-          if (vm.imgFileName !== '') {
-            vm.product.productPicture = vm.imgFileName
+          if (vm.product.productPicture === '') {
+            alert('Please upload img...')
+          } else {
+            var postData = JSON.stringify(vm.product)
+            this.$axios
+              .post('/insert-product', postData, {
+                headers: {
+                  'Content-Type': 'application/json;charset=UTF-8'
+                }
+              })
+              .then(response => {
+                alert(response.data.message)
+              })
+              .catch(function(error) {
+                alert(error)
+              })
           }
-          var postData = JSON.stringify(vm.product)
-          this.$axios
-            .post('/insert-product', postData, {
-              headers: {
-                'Content-Type': 'application/json;charset=UTF-8'
-              }
-            })
-            .then(response => {
-              alert(response.data.message)
-            })
-            .catch(function(error) {
-              alert(error)
-            })
         }
       } catch (error) {
         alert(error.message)
@@ -182,9 +186,26 @@ export default {
     selectChange: function() {
       this.product.category.id = this.selectValue
     },
-    handleAvatarSuccess: function(fileName, imgUrl) {
-      this.imgFileName = fileName
-      this.product.productPicture = imgUrl
+    handleAvatarSuccess: function(response, file) {
+      let vm = this
+      vm.imageUrl = URL.createObjectURL(file.raw)
+      vm.saveImgFile(response.message)
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
+    },
+    saveImgFile: function(fileName) {
+      let vm = this
+      vm.product.productPicture = fileName
+      alert('Upload img success!')
     }
   }
 }
@@ -211,5 +232,28 @@ export default {
   width: 100%;
   height: auto;
   float: left;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>
