@@ -2,7 +2,7 @@
   <div class="product_box">
     <div class="product_picture_box">
       <img 
-        :src="'file:///'+product.productPicture"
+        :src="imgSrc"
         class="img_picture"
       >
     </div>
@@ -35,7 +35,14 @@ export default {
     }
   },
   data: function() {
-    return {}
+    return {
+      imgSrc: ''
+    }
+  },
+  created() {
+    let vm = this
+    vm.imgSrc =
+      'http://localhost:8080/show-img?fileName=' + vm.product.productPicture
   },
   methods: {}
 }
