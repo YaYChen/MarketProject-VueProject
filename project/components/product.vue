@@ -42,7 +42,8 @@ export default {
   created() {
     let vm = this
     vm.imgSrc =
-      'http://localhost:8080/show-img?fileName=' + vm.product.productPicture
+      'http://101.132.123.27:8080/show-img?fileName=' +
+      vm.product.productPicture
   },
   methods: {}
 }
