@@ -12,5 +12,17 @@
       "storge":"Storge Manager",
       "supplier":"Supplier Manager"
     }
-  }
+  },
+  "button": {
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "product": {
+    "name": "Name",
+    "category": "Category",
+    "specification": "Specification",
+    "purchasePrice": "Purchase Price",
+    "price": "Price"
+  },
+  "uploadImg":"Upload Img"
 }

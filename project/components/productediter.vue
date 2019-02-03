@@ -1,13 +1,14 @@
 <template>
   <div class="product_editer_box">
     <div class="img_upload_box">
-      <label>Product Picture Upload:</label>
+      <label>{{ $t('uploadImg') }}:</label>
       <el-upload
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
+        :on-error="handleAvatarFaile"
         :before-upload="beforeAvatarUpload"
         class="avatar-uploader"
-        action="http://localhost:8080/upload-img"
+        action="http://101.132.123.27:8080/upload-img"
       >
         <img 
           v-if="imageUrl" 
@@ -25,10 +26,10 @@
       label-position="top" 
       label-width="80px" 
     >
-      <el-form-item label="名称：">
+      <el-form-item :label="$t('product.name')">
         <el-input v-model="product.name"/>
       </el-form-item>
-      <el-form-item label="类别：">
+      <el-form-item :label="$t('product.category')">
         <el-select
           v-model="selectValue"
           placeholder="Category select..."
@@ -41,21 +42,21 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="规格：">
+      <el-form-item :label="$t('product.specification')">
         <el-input v-model="product.specification"/>
       </el-form-item>
-      <el-form-item label="进价：">
+      <el-form-item :label="$t('product.purchasePrice')">
         <el-input v-model="product.purchasePrice"/>
       </el-form-item>
-      <el-form-item label="售价：">
+      <el-form-item :label="$t('product.price')">
         <el-input v-model="product.price"/>
       </el-form-item>
       <el-form-item>
         <el-button 
           type="primary" 
           @click="submit"
-        >立即创建</el-button>
-        <el-button @click="resetForm">重置</el-button>
+        >{{ $t('button.save') }}</el-button>
+        <el-button @click="hiddenForm">{{ $t('button.cancel') }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -71,6 +72,10 @@ export default {
     update: {
       type: Boolean,
       default: false
+    },
+    onCancel: {
+      type: Function,
+      default: null
     }
   },
   data: function() {
@@ -149,6 +154,7 @@ export default {
               })
               .then(response => {
                 alert(response.data.message)
+                vm.product = ''
               })
               .catch(function(error) {
                 alert(error)
@@ -177,8 +183,10 @@ export default {
         alert(error.message)
       }
     },
-    resetForm: function() {
-      this.product = this.orginalProduct
+    hiddenForm: function() {
+      let vm = this
+      vm.product = ''
+      vm.onCancel()
     },
     cancel: function() {
       this.$emit('disableEditer')
@@ -206,6 +214,9 @@ export default {
       let vm = this
       vm.product.productPicture = fileName
       alert('Upload img success!')
+    },
+    handleAvatarFaile: function(err, file, fileList) {
+      console.log('err: ' + err)
     }
   }
 }

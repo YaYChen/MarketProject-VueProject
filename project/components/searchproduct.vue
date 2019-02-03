@@ -53,9 +53,21 @@ export default {
           }
         })
         .then(function(response) {
-          vm.showProduct = true
-          vm.product = response.data
-          vm.barcode = ''
+          if (
+            response.data === null ||
+            response.data === undefined ||
+            response.data === ''
+          ) {
+            vm.$message({
+              message: '未找到该产品...',
+              type: 'warning'
+            })
+            vm.barcode = ''
+          } else {
+            vm.showProduct = true
+            vm.product = response.data
+            vm.barcode = ''
+          }
         })
         .catch(function(error) {
           console.log(error)

@@ -12,5 +12,17 @@
       "storge":"库存管理",
       "supplier":"供应商管理"
     }
-  }
+  },
+  "button": {
+    "save": "保存",
+    "cancel": "取消"
+  },
+  "product": {
+    "name": "名称",
+    "category": "类别",
+    "specification": "规格",
+    "purchasePrice": "进价",
+    "price": "价格"
+  },
+  "uploadImg":"上传图片"
 }

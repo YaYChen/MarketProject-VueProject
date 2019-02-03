@@ -24,6 +24,7 @@
         ref="product_view"
         :product="product"
         :update="update"
+        :onCancel="cancel"
         @disableEditer="disableEditer"
       />
     </div>
@@ -85,6 +86,10 @@ export default {
       var vm = this
       vm.showProduct = false
       vm.barcode = ''
+    },
+    cancel: function() {
+      var vm = this
+      vm.showProduct = false
     }
   }
 }
