@@ -7,8 +7,8 @@
         :on-success="handleAvatarSuccess"
         :on-error="handleAvatarFaile"
         :before-upload="beforeAvatarUpload"
+        :action="common.imgUploadPath"
         class="avatar-uploader"
-        action="http://101.132.123.27:8080/upload-img"
       >
         <img 
           v-if="imageUrl" 
@@ -63,6 +63,8 @@
 </template>
 
 <script>
+import common from '@/services/common.js'
+
 export default {
   props: {
     product: {

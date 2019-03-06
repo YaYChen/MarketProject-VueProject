@@ -15,7 +15,8 @@
   },
   "button": {
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "product": {
     "name": "Name",

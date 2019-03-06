@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import common from '@/services/common.js'
+
 export default {
   props: {
     product: {
@@ -41,9 +43,7 @@ export default {
   },
   created() {
     let vm = this
-    vm.imgSrc =
-      'http://101.132.123.27:8080/show-img?fileName=' +
-      vm.product.productPicture
+    vm.imgSrc = common.getImgFilePath(vm.product.productPicture)
   },
   methods: {}
 }

@@ -1,35 +1,56 @@
 <template>
   <div class="main_div">
-    <div class="img_div">
-      <img>
-    </div>
-    <div class="detial_div">
-      <div class="product_detial_div">Name: {{ product.name }}</div>
-      <div class="product_detial_div">Category: {{ product.category }}</div>
-      <div class="product_detial_div">Specification: {{ product.specification }}</div>
-      <div class="product_detial_div"/>
-    </div>
-    <div class="settlement_div">
-      <div class="price_div">
-        <p>￥</p>
-        {{ product.totalPrice }}
-      </div>
-      <div class="quantity_div">
-        <div class="quantity_number_div">{{ product.quantity }}</div>
-        <div class="quantity_operating_div">
-          <div class="add_div">
-            <el-button @click="addQuantity">+</el-button>
-          </div>
-          <div class="remove_div">
-            <el-button @click="removeQuantity">-</el-button>
-          </div>
+    <el-row>
+      <el-col :span="3">
+        <div class="img_div">
+          <img
+            :src="imgSrc"
+            class="img_picture">
         </div>
-      </div>
-    </div>
+      </el-col>
+      <el-col :span="10">
+        <div class="detial_div">
+          <div class="product_detial_div">Name: {{ product.name }}</div>
+          <div class="product_detial_div">Category: {{ product.category.name }}</div>
+          <div class="product_detial_div">Specification: {{ product.specification }}</div>
+          <div class="product_detial_div"/>
+        </div>
+      </el-col>
+      <el-col :span="11">
+        <div class="settlement_div">
+          <el-row>
+            <el-col :span="12">
+              <div class="price_div">
+                {{ product.totalPrice }} ￥
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="quantity_div">
+                <el-row>
+                  <el-col :span="6">
+                    <el-button @click="addQuantity">+</el-button>
+                  </el-col>
+                  <el-col :span="12">
+                    <div class="price_div">
+                      {{ product.quantity }}
+                    </div>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-button @click="removeQuantity">-</el-button>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
+import common from '@/services/common.js'
+
 export default {
   props: {
     product: {
@@ -44,18 +65,30 @@ export default {
   data() {
     return {
       quantity: 1,
-      totalPrice: 0
+      totalPrice: 0,
+      imgSrc: '',
+      common: common
     }
   },
   created() {
-    this.totalPrice = this.quantity * this.product.price
+    this.product.totalPrice = this.product.quantity * this.product.price
+    this.imgSrc = this.common.getImgFilePath(this.product.productPicture)
+    console.log(this.imgSrc)
   },
   methods: {
-    addQuantity: function() {
-      this.$emit('addQuantity', this.index)
+    addQuantity() {
+      let vm = this
+      console.log(vm.product.quantity)
+      vm.product.quantity = vm.product.quantity + 1
+      vm.product.totalPrice = vm.product.quantity * vm.product.price
+      console.log(vm.product.quantity)
     },
-    removeQuantity: function() {
-      this.$emit('removeQuantity', this.index)
+    removeQuantity() {
+      let vm = this
+      console.log(vm.product.quantity)
+      vm.product.quantity = vm.product.quantity - 1
+      vm.product.totalPrice = vm.product.quantity * vm.product.price
+      console.log(vm.product.quantity)
     }
   }
 }
@@ -77,7 +110,7 @@ export default {
 
 .settlement_div {
   height: 100px;
-  width: 300px;
+  width: 100%;
 }
 .product_detial_div {
   width: 100%;
@@ -87,15 +120,17 @@ export default {
 }
 .price_div {
   height: 100px;
-  width: 100px;
+  line-height: 100px;
+  width: 100%;
   font-family: 'Microsoft YaHei';
   font-size: 40px;
   float: left;
+  text-align: center;
 }
 .quantity_div {
+  line-height: 100px;
   height: 100px;
-  width: 200px;
-  margin-left: 100px;
+  width: 100%;
 }
 .quantity_number_div {
   height: 100px;
@@ -114,5 +149,9 @@ export default {
 .remove_div {
   height: 50px;
   width: 100%;
+}
+.img_picture {
+  width: 100%;
+  height: 100%;
 }
 </style>

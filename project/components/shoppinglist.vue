@@ -5,7 +5,7 @@
         <el-input
           v-model="barcode"
           placeholder="Input barcode,please..."
-          @keyup.enter="inputListener"
+          @keyup.enter.native="inputListener"
         >
           <el-button 
             slot="append" 
@@ -24,25 +24,29 @@
         :product="item"
         :index="index"
         :key="item.id"
-        @addQuantity="addQuantity"
-        @removeQuantity="removeQuantity"
       />
     </div>
+    <div class="settlement_div">
+      <div class="button-div">
+        <el-button>Settlement</el-button>
+        <el-button>Cancle</el-button>
+      </div>
+    </div>
     <el-dialog 
-      :title="$t('dialog.title')" 
-      :visible.sync="dialogVisible" 
+      :visible.sync="dialogVisible"
+      title="Tips"
       width="30%"
     >
-      <span>{{ $t('dialog.content.deleteornot') }}</span>
+      <span>test</span>
       <span 
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogVisible = false">{{ $t('handle.cancel') }}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t('button.cancel') }}</el-button>
         <el-button 
           type="primary" 
           @click="dialogConfirm"
-        >{{ $t('handle.confirm') }}</el-button>
+        >{{ $t('button.confirm') }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -75,15 +79,16 @@ export default {
         })
         .then(function(response) {
           var product = response.data
-          vm.handleIndex = getIndexInArray(product.id)
+          vm.handleIndex = vm.getIndexInArray(product.id)
           if (vm.handleIndex === -1) {
             var item = {
               id: product.id,
               name: product.name,
               category: product.category,
               Specification: product.Specification,
-              price: Double.valueOf(product.price),
-              totalPrice: Double.valueOf(product.price),
+              productPicture: product.productPicture,
+              price: parseFloat(product.price),
+              totalPrice: parseFloat(product.price),
               quantity: 1
             }
             vm.productList[vm.productList.length] = item
@@ -109,23 +114,6 @@ export default {
         }
       }
       return -1
-    },
-    addQuantity: function(index) {
-      var vm = this
-      vm.productList[index].quantity++
-      vm.productList[index].totalPrice =
-        vm.productList[index].price * vm.productList[index].quantity
-    },
-    removeQuantity: function(index) {
-      var vm = this
-      if (vm.productList[index].quantity > 1) {
-        vm.productList[index].quantity--
-        vm.productList[index].totalPrice =
-          vm.productList[index].price * vm.productList[index].quantity
-      } else {
-        vm.dialogVisible = false
-        vm.handleIndex = index
-      }
     },
     dialogConfirm: function() {
       var vm = this
@@ -159,5 +147,16 @@ export default {
   width: 1000px;
   height: auto;
   margin: 10px auto;
+}
+
+.settlement_div {
+  margin: 10px auto;
+  width: 1000px;
+  border-top: 2px solid black;
+  text-align: right;
+}
+
+.button-div {
+  margin: 5px;
 }
 </style>
