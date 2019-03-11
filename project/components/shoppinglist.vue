@@ -28,8 +28,8 @@
     </div>
     <div class="settlement_div">
       <div class="button-div">
-        <el-button>Settlement</el-button>
-        <el-button>Cancle</el-button>
+        <el-button @click="settlement">Settlement</el-button>
+        <el-button >{{ $t('button.cancel') }}</el-button>
       </div>
     </div>
     <el-dialog 
@@ -61,7 +61,7 @@ export default {
   },
   data() {
     return {
-      productList: [],
+      productList: this.$store.state.cart.items,
       handleIndex: -1,
       dialogVisible: false,
       barcode: ''
@@ -79,46 +79,21 @@ export default {
         })
         .then(function(response) {
           var product = response.data
-          vm.handleIndex = vm.getIndexInArray(product.id)
-          if (vm.handleIndex === -1) {
-            var item = {
-              id: product.id,
-              name: product.name,
-              category: product.category,
-              Specification: product.Specification,
-              productPicture: product.productPicture,
-              price: parseFloat(product.price),
-              totalPrice: parseFloat(product.price),
-              quantity: 1
-            }
-            vm.productList[vm.productList.length] = item
-          } else {
-            vm.productList[vm.handleIndex].quantity++
-            vm.productList[vm.handleIndex].totalPrice =
-              vm.productList[vm.handleIndex].quantity * vm.product.price
-          }
+          vm.$store.dispatch('cart/addProductToCart', product)
           vm.barcode = ''
         })
         .catch(function(error) {
           console.log(error)
         })
     },
-    getIndexInArray: function(id) {
-      var vm = this
-      if (vm.productList.length === 0) {
-        return -1
-      }
-      for (var i = 0; i < vm.productList.length; i++) {
-        if (id === vm.productList[i].id) {
-          return i
-        }
-      }
-      return -1
-    },
     dialogConfirm: function() {
       var vm = this
       vm.productList.splice(vm.handleIndex, 1)
       vm.dialogVisible = false
+    },
+    settlement: function() {
+      let vm = this
+      console.log(vm.productList)
     }
   }
 }

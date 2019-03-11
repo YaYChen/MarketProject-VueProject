@@ -36,7 +36,7 @@
                     </div>
                   </el-col>
                   <el-col :span="6">
-                    <el-button @click="removeQuantity">-</el-button>
+                    <el-button @click="reduceQuantity">-</el-button>
                   </el-col>
                 </el-row>
               </div>
@@ -64,31 +64,21 @@ export default {
   },
   data() {
     return {
-      quantity: 1,
-      totalPrice: 0,
       imgSrc: '',
       common: common
     }
   },
   created() {
-    this.product.totalPrice = this.product.quantity * this.product.price
     this.imgSrc = this.common.getImgFilePath(this.product.productPicture)
-    console.log(this.imgSrc)
   },
   methods: {
     addQuantity() {
       let vm = this
-      console.log(vm.product.quantity)
-      vm.product.quantity = vm.product.quantity + 1
-      vm.product.totalPrice = vm.product.quantity * vm.product.price
-      console.log(vm.product.quantity)
+      vm.$store.dispatch('cart/addItemQuantity', vm.product.id)
     },
-    removeQuantity() {
+    reduceQuantity() {
       let vm = this
-      console.log(vm.product.quantity)
-      vm.product.quantity = vm.product.quantity - 1
-      vm.product.totalPrice = vm.product.quantity * vm.product.price
-      console.log(vm.product.quantity)
+      vm.$store.dispatch('cart/reduceItemQuantity', vm.product.id)
     }
   }
 }
