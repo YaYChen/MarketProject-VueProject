@@ -1,17 +1,13 @@
 const state = {
-  items: []
+  items: [],
+  totalNumber: 0,
+  totalPrice: 0
 }
 
 // getters
 const getters = {
   cartProducts: (state, getters) => {
     return state.items
-  },
-
-  cartTotalPrice: (state, getters) => {
-    return getters.cartProducts.reduce((total, product) => {
-      return total + product.totalPrice
-    }, 0)
   }
 }
 
@@ -23,8 +19,8 @@ const actions = {
       let item = {
         id: product.id,
         name: product.name,
-        category: product.category,
-        Specification: product.Specification,
+        category: product.category.name,
+        specification: product.specification,
         productPicture: product.productPicture,
         price: parseFloat(product.price),
         totalPrice: parseFloat(product.price),
@@ -51,6 +47,14 @@ const actions = {
   clearCart({ commit, state }) {
     //emptycart
     commit('setCartItems', { items: [] })
+  },
+
+  getTotalPrice({ commit, state }) {
+    commit('countTotalPrice')
+  },
+
+  getTotalNumber({ commit, state }) {
+    commit('countTotalNumber')
   }
 }
 
@@ -79,6 +83,20 @@ const mutations = {
 
   setCartItems(state, { items }) {
     state.items = items
+  },
+
+  countTotalPrice(state) {
+    state.totalPrice = 0
+    state.items.forEach(element => {
+      state.totalPrice = state.totalPrice + element.totalPrice
+    })
+  },
+
+  countTotalNumber(state) {
+    state.totalNumber = 0
+    state.items.forEach(element => {
+      state.totalNumber = state.totalNumber + element.quantity
+    })
   }
 }
 

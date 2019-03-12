@@ -16,7 +16,8 @@
   "button": {
     "save": "保存",
     "cancel": "取消",
-    "confirm": "确认"
+    "confirm": "确认",
+    "settlement": "结算"
   },
   "product": {
     "name": "名称",

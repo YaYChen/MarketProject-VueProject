@@ -16,7 +16,8 @@
   "button": {
     "save": "Save",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "settlement": "Settlement"
   },
   "product": {
     "name": "Name",

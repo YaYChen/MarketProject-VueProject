@@ -28,16 +28,51 @@
     </div>
     <div class="settlement_div">
       <div class="button-div">
-        <el-button @click="settlement">Settlement</el-button>
+        <el-button @click="settlement">{{ $t('button.settlement') }}</el-button>
         <el-button >{{ $t('button.cancel') }}</el-button>
       </div>
     </div>
+
     <el-dialog 
       :visible.sync="dialogVisible"
-      title="Tips"
-      width="30%"
+      title="购物清单"
+      width="50%"
     >
-      <span>test</span>
+      <div>
+        <div class="list_title_div">序号： {{ order.serial }}</div>
+        <div class="list_title_div">时间： {{ order.createTime }}</div>
+        <div class="list_title_div">用户： {{ order.createUser }}</div>
+      </div>
+      <div>
+        <el-table
+          :data="order.orderItems"
+          style="width: 100%">
+          <el-table-column
+            prop="name"
+            label="名称"
+            width="180"/>
+          <el-table-column
+            prop="category"
+            label="类别"
+            width="180"/>
+          <el-table-column
+            prop="specification"
+            label="规格"/>
+          <el-table-column
+            prop="price"
+            label="单价"/>
+          <el-table-column
+            prop="quantity"
+            label="数量"/>
+          <el-table-column
+            prop="totalPrice"
+            label="总价"/>
+        </el-table>
+      </div>
+      <div class="list_footer_div">
+        <div class="list_footer_content_div">商品总量：{{ order.totalNumber }}</div>
+        <div class="list_footer_content_div">商品总价：{{ order.totalPrice }}</div>
+      </div>
       <span 
         slot="footer"
         class="dialog-footer"
@@ -64,7 +99,8 @@ export default {
       productList: this.$store.state.cart.items,
       handleIndex: -1,
       dialogVisible: false,
-      barcode: ''
+      barcode: '',
+      order: {}
     }
   },
   methods: {
@@ -88,12 +124,37 @@ export default {
     },
     dialogConfirm: function() {
       var vm = this
-      vm.productList.splice(vm.handleIndex, 1)
       vm.dialogVisible = false
     },
     settlement: function() {
       let vm = this
-      console.log(vm.productList)
+      vm.getOrder()
+      vm.dialogVisible = true
+    },
+    getOrder() {
+      let vm = this
+      vm.$store.dispatch('cart/getTotalPrice')
+      vm.$store.dispatch('cart/getTotalNumber')
+      let date = new Date()
+      vm.order = {
+        serial: vm.getDateFormat(date),
+        createTime: '',
+        createUser: '',
+        status: '',
+        totalPrice: vm.$store.state.cart.totalPrice,
+        totalNumber: vm.$store.state.cart.totalNumber,
+        orderItems: vm.productList
+      }
+    },
+    getDateFormat: function(date) {
+      let dateString = ''
+      dateString = dateString + date.getFullYear()
+      dateString = dateString + date.getMonth()
+      dateString = dateString + date.getDate()
+      dateString = dateString + date.getHours()
+      dateString = dateString + date.getMinutes()
+      dateString = dateString + date.getSeconds()
+      return dateString
     }
   }
 }
@@ -133,5 +194,24 @@ export default {
 
 .button-div {
   margin: 5px;
+}
+
+.list_title_div {
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
+  font-family: 'Microsoft YaHei';
+}
+
+.list_footer_div {
+  margin-top: 5px;
+  border-top: 2px solid black;
+}
+
+.list_footer_content_div {
+  height: 30px;
+  line-height: 30px;
+  font-size: 20px;
+  font-family: 'Microsoft YaHei';
 }
 </style>

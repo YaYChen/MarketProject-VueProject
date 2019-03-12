@@ -86,6 +86,7 @@ export default {
       selectCategories: [],
       selectValue: '',
       imageUrl: '',
+      common: common,
       rules: {
         name: [
           {
