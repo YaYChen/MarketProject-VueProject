@@ -46,7 +46,7 @@ const actions = {
 
   clearCart({ commit, state }) {
     //emptycart
-    commit('setCartItems', { items: [] })
+    commit('setCartItems')
   },
 
   getTotalPrice({ commit, state }) {
@@ -81,8 +81,10 @@ const mutations = {
     }
   },
 
-  setCartItems(state, { items }) {
-    state.items = items
+  setCartItems(state) {
+    state.items = []
+    state.totalNumber = 0
+    state.totalPrice = 0
   },
 
   countTotalPrice(state) {

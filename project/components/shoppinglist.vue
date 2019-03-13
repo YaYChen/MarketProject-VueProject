@@ -26,7 +26,9 @@
         :key="item.id"
       />
     </div>
-    <div class="settlement_div">
+    <div
+      v-if="productList.length > 0"
+      class="settlement_div">
       <div class="button-div">
         <el-button @click="settlement">{{ $t('button.settlement') }}</el-button>
         <el-button >{{ $t('button.cancel') }}</el-button>
@@ -40,12 +42,10 @@
     >
       <div>
         <div class="list_title_div">序号： {{ order.serial }}</div>
-        <div class="list_title_div">时间： {{ order.createTime }}</div>
-        <div class="list_title_div">用户： {{ order.createUser }}</div>
       </div>
       <div>
         <el-table
-          :data="order.orderItems"
+          :data="productList"
           style="width: 100%">
           <el-table-column
             prop="name"
@@ -60,18 +60,18 @@
             label="规格"/>
           <el-table-column
             prop="price"
-            label="单价"/>
+            label="单价(￥)"/>
           <el-table-column
             prop="quantity"
             label="数量"/>
           <el-table-column
             prop="totalPrice"
-            label="总价"/>
+            label="总价(￥)"/>
         </el-table>
       </div>
       <div class="list_footer_div">
         <div class="list_footer_content_div">商品总量：{{ order.totalNumber }}</div>
-        <div class="list_footer_content_div">商品总价：{{ order.totalPrice }}</div>
+        <div class="list_footer_content_div">商品总价：{{ order.totalPrice }} ￥</div>
       </div>
       <span 
         slot="footer"
@@ -89,6 +89,7 @@
 
 <script>
 import ListItem from '@/components/listitem.vue'
+import common from '@/services/common.js'
 
 export default {
   components: {
@@ -97,17 +98,28 @@ export default {
   data() {
     return {
       productList: this.$store.state.cart.items,
-      handleIndex: -1,
       dialogVisible: false,
       barcode: '',
-      order: {}
+      order: {},
+      common: common,
+      userID: ''
     }
+  },
+  created() {
+    let vm = this
+    vm.$axios
+      .get('/users')
+      .then(function(response) {
+        vm.userID = response.data[0].id
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
   },
   methods: {
     inputListener: function() {
       var vm = this
-      vm.handleIndex = -1
-      this.$axios
+      vm.$axios
         .get('/product-ByCode', {
           params: {
             code: vm.barcode
@@ -124,6 +136,7 @@ export default {
     },
     dialogConfirm: function() {
       var vm = this
+      vm.saveOrder()
       vm.dialogVisible = false
     },
     settlement: function() {
@@ -137,24 +150,48 @@ export default {
       vm.$store.dispatch('cart/getTotalNumber')
       let date = new Date()
       vm.order = {
-        serial: vm.getDateFormat(date),
+        serial: vm.common.getDateString(date),
         createTime: '',
-        createUser: '',
-        status: '',
+        createUser: vm.userID,
+        status: 'Done',
         totalPrice: vm.$store.state.cart.totalPrice,
         totalNumber: vm.$store.state.cart.totalNumber,
-        orderItems: vm.productList
+        orderItems: vm.getOrderItems()
       }
     },
-    getDateFormat: function(date) {
-      let dateString = ''
-      dateString = dateString + date.getFullYear()
-      dateString = dateString + date.getMonth()
-      dateString = dateString + date.getDate()
-      dateString = dateString + date.getHours()
-      dateString = dateString + date.getMinutes()
-      dateString = dateString + date.getSeconds()
-      return dateString
+    getOrderItems() {
+      let vm = this
+      let items = []
+      vm.productList.forEach(element => {
+        let item = {
+          orderID: '',
+          productID: element.id,
+          quantity: element.quantity
+        }
+        items.push(item)
+      })
+      return items
+    },
+    saveOrder() {
+      let vm = this
+      let postData = JSON.stringify(vm.order)
+      vm.$axios
+        .post('/create-order', postData, {
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+          }
+        })
+        .then(response => {
+          vm.$message({
+            message: 'Success!',
+            type: 'success'
+          })
+          vm.$store.dispatch('cart/clearCart')
+          vm.productList = vm.$store.state.cart.items
+        })
+        .catch(function(error) {
+          vm.$message.error(error)
+        })
     }
   }
 }

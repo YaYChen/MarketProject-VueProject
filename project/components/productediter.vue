@@ -144,12 +144,12 @@ export default {
     submit: function() {
       try {
         var vm = this
-        if (this.update == true) {
+        if (vm.update == true) {
           if (vm.product.productPicture === '') {
             alert('Please upload img...')
           } else {
             var postData = JSON.stringify(vm.product)
-            this.$axios
+            vm.$axios
               .post('/update-product', postData, {
                 headers: {
                   'Content-Type': 'application/json;charset=UTF-8'
@@ -168,7 +168,7 @@ export default {
             alert('Please upload img...')
           } else {
             var postData = JSON.stringify(vm.product)
-            this.$axios
+            vm.$axios
               .post('/insert-product', postData, {
                 headers: {
                   'Content-Type': 'application/json;charset=UTF-8'
