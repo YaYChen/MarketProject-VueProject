@@ -21,9 +21,8 @@
     >
       <listitem-component
         v-for="(item, index) in productList"
-        :product="item"
-        :index="index"
-        :key="item.id"
+        :item="item"
+        :key="index"
       />
     </div>
     <div
@@ -48,18 +47,18 @@
           :data="productList"
           style="width: 100%">
           <el-table-column
-            prop="name"
+            prop="product.name"
             label="名称"
             width="180"/>
           <el-table-column
-            prop="category"
+            prop="product.category.name"
             label="类别"
             width="180"/>
           <el-table-column
-            prop="specification"
+            prop="product.specification"
             label="规格"/>
           <el-table-column
-            prop="price"
+            prop="product.price"
             label="单价(￥)"/>
           <el-table-column
             prop="quantity"
@@ -102,7 +101,7 @@ export default {
       barcode: '',
       order: {},
       common: common,
-      userID: ''
+      userID: 1
     }
   },
   created() {
@@ -152,7 +151,7 @@ export default {
       vm.order = {
         serial: vm.common.getDateString(date),
         createTime: '',
-        createUser: vm.userID,
+        createUser: { id: vm.userID },
         status: 'Done',
         totalPrice: vm.$store.state.cart.totalPrice,
         totalNumber: vm.$store.state.cart.totalNumber,
@@ -165,8 +164,9 @@ export default {
       vm.productList.forEach(element => {
         let item = {
           orderID: '',
-          productID: element.id,
-          quantity: element.quantity
+          product: element.product,
+          quantity: element.quantity,
+          totalPrice: element.totalPrice
         }
         items.push(item)
       })

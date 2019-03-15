@@ -14,33 +14,28 @@ const getters = {
 // actions
 const actions = {
   addProductToCart({ state, commit }, product) {
-    const cartItem = state.items.find(item => item.id === product.id)
+    const cartItem = state.items.find(item => item.product.id === product.id)
     if (!cartItem) {
       let item = {
-        id: product.id,
-        name: product.name,
-        category: product.category.name,
-        specification: product.specification,
-        productPicture: product.productPicture,
-        price: parseFloat(product.price),
-        totalPrice: parseFloat(product.price),
-        quantity: 1
+        product: product,
+        quantity: 1,
+        totalPrice: parseFloat(product.price)
       }
       commit('pushProductToCart', item)
     } else {
-      commit('incrementItemQuantity', cartItem)
+      commit('incrementItemQuantity', cartItem.product)
     }
   },
 
   addItemQuantity({ state, commit }, id) {
-    const cartItem = state.items.find(item => item.id === id)
-    commit('incrementItemQuantity', cartItem)
+    const cartItem = state.items.find(item => item.product.id === id)
+    commit('incrementItemQuantity', cartItem.product)
   },
 
   reduceItemQuantity({ state, commit }, id) {
-    const cartItem = state.items.find(item => item.id === id)
+    const cartItem = state.items.find(item => item.product.id === id)
     if (cartItem) {
-      commit('disincrementItemQuantity', cartItem)
+      commit('disincrementItemQuantity', cartItem.product)
     }
   },
 
@@ -60,24 +55,24 @@ const actions = {
 
 // mutations
 const mutations = {
-  pushProductToCart(state, product) {
-    state.items.push(product)
+  pushProductToCart(state, item) {
+    state.items.push(item)
   },
 
   incrementItemQuantity(state, { id }) {
-    const cartItem = state.items.find(item => item.id === id)
+    const cartItem = state.items.find(item => item.product.id === id)
     cartItem.quantity++
-    cartItem.totalPrice = cartItem.price * cartItem.quantity
+    cartItem.totalPrice = cartItem.product.price * cartItem.quantity
   },
 
   disincrementItemQuantity(state, { id }) {
-    const cartItem = state.items.find(item => item.id === id)
+    const cartItem = state.items.find(item => item.product.id === id)
     cartItem.quantity--
     if (cartItem.quantity <= 0) {
       let index = state.items.indexOf(cartItem)
       state.items.splice(index, 1)
     } else {
-      cartItem.totalPrice = cartItem.price * cartItem.quantity
+      cartItem.totalPrice = cartItem.product.price * cartItem.quantity
     }
   },
 

@@ -10,9 +10,9 @@
       </el-col>
       <el-col :span="10">
         <div class="detial_div">
-          <div class="product_detial_div">Name: {{ product.name }}</div>
-          <div class="product_detial_div">Category: {{ product.category.name }}</div>
-          <div class="product_detial_div">Specification: {{ product.specification }}</div>
+          <div class="product_detial_div">Name: {{ item.product.name }}</div>
+          <div class="product_detial_div">Category: {{ item.product.category.name }}</div>
+          <div class="product_detial_div">Specification: {{ item.product.specification }}</div>
           <div class="product_detial_div"/>
         </div>
       </el-col>
@@ -21,7 +21,7 @@
           <el-row>
             <el-col :span="12">
               <div class="price_div">
-                {{ product.totalPrice }} ￥
+                {{ item.totalPrice }} ￥
               </div>
             </el-col>
             <el-col :span="12">
@@ -32,7 +32,7 @@
                   </el-col>
                   <el-col :span="12">
                     <div class="price_div">
-                      {{ product.quantity }}
+                      {{ item.quantity }}
                     </div>
                   </el-col>
                   <el-col :span="6">
@@ -53,13 +53,9 @@ import common from '@/services/common.js'
 
 export default {
   props: {
-    product: {
+    item: {
       type: Object,
       default: null
-    },
-    index: {
-      type: Number,
-      default: -1
     }
   },
   data() {
@@ -69,25 +65,26 @@ export default {
     }
   },
   created() {
-    this.imgSrc = this.common.getImgFilePath(this.product.productPicture)
+    let vm = this
+    vm.imgSrc = vm.common.getImgFilePath(vm.item.product.productPicture)
   },
   methods: {
     addQuantity() {
       let vm = this
-      vm.$store.dispatch('cart/addItemQuantity', vm.product.id)
+      vm.$store.dispatch('cart/addItemQuantity', vm.item.product.id)
     },
     reduceQuantity() {
       let vm = this
-      vm.$store.dispatch('cart/reduceItemQuantity', vm.product.id)
+      vm.$store.dispatch('cart/reduceItemQuantity', vm.item.product.id)
     }
   }
 }
 </script>
 
 <style scoped>
-.main-div {
-  width: 1000px;
-  height: 100px;
+.main_div {
+  margin-bottom: 5px;
+  border-bottom: 1px dashed gray;
 }
 .img_div {
   height: 100px;
