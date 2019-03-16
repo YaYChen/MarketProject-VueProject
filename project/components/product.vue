@@ -16,9 +16,9 @@
         <div class="show_detail_info_value">{{ product.specification }}</div>
       </div>
       <div class="product_detail_price">
-        <div class="show_price_title">{{ $t('product.price') }}：</div>
+        <div class="show_price_title">{{ $t('product.price') }}(￥)：</div>
         <div class="show_price_value_box">
-          {{ product.price }} (￥)
+          {{ product.price }}
         </div>
       </div>
     </div>
@@ -83,7 +83,6 @@ export default {
   height: 294px;
   width: 300px;
   text-align: left;
-  border-right: 1px solid lightgray;
   float: left;
 }
 
@@ -115,6 +114,7 @@ export default {
   font-family: 'Microsoft YaHei';
   font-size: 30px;
   padding: 2px;
+  border-bottom: 1px dashed lightgray;
 }
 
 .show_price_value_box {
