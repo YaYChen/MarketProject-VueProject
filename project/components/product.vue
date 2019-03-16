@@ -8,18 +8,17 @@
     </div>
     <div class="product_detail_box">
       <div class="product_detail_info">
-        <div class="show_detail_info_title">品名:</div>
+        <div class="show_detail_info_title">{{ $t('product.name') }}:</div>
         <div class="show_detail_info_value">{{ product.name }}</div>
-        <div class="show_detail_info_title">类别:</div>
+        <div class="show_detail_info_title">{{ $t('product.category') }}:</div>
         <div class="show_detail_info_value">{{ product.category.name }}</div>
-        <div class="show_detail_info_title">规格:</div>
+        <div class="show_detail_info_title">{{ $t('product.specification') }}:</div>
         <div class="show_detail_info_value">{{ product.specification }}</div>
       </div>
       <div class="product_detail_price">
-        <div class="show_price_title">价格：</div>
+        <div class="show_price_title">{{ $t('product.price') }}：</div>
         <div class="show_price_value_box">
-          <div class="show_price_value_symbol">￥</div>
-          <div class="show_price_value">{{ product.price }}</div>
+          {{ product.price }} (￥)
         </div>
       </div>
     </div>
@@ -120,7 +119,12 @@ export default {
 
 .show_price_value_box {
   height: 230px;
+  line-height: 230px;
   width: 394px;
+  font-family: 'Microsoft YaHei';
+  font-size: 120px;
+  color: green;
+  float: left;
   text-align: center;
 }
 

@@ -91,35 +91,35 @@ export default {
         name: [
           {
             required: true,
-            message: '请输入商品名称',
+            message: $t('productRule.nameRule'),
             trigger: 'blur'
           }
         ],
         category: [
           {
             required: true,
-            message: '请输入商品类别',
+            message: $t('productRule.categoryRule'),
             trigger: 'blur'
           }
         ],
         specification: [
           {
             required: true,
-            message: '请输入商品规格',
+            message: $t('productRule.specificationRule'),
             trigger: 'blur'
           }
         ],
         purchasePrice: [
           {
             required: true,
-            message: '请输入商品进价',
+            message: $t('productRule.purchasePriceRule'),
             trigger: 'blur'
           }
         ],
         price: [
           {
             required: true,
-            message: '请输入商品售价',
+            message: $t('productRule.priceRule'),
             trigger: 'blur'
           }
         ]

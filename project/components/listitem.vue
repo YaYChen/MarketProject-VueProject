@@ -10,9 +10,9 @@
       </el-col>
       <el-col :span="10">
         <div class="detial_div">
-          <div class="product_detial_div">Name: {{ item.product.name }}</div>
-          <div class="product_detial_div">Category: {{ item.product.category.name }}</div>
-          <div class="product_detial_div">Specification: {{ item.product.specification }}</div>
+          <div class="product_detial_div">{{ $t('product.name') }}: {{ item.product.name }}</div>
+          <div class="product_detial_div">{{ $t('product.category') }}: {{ item.product.category.name }}</div>
+          <div class="product_detial_div">{{ $t('product.specification') }}: {{ item.product.specification }}</div>
           <div class="product_detial_div"/>
         </div>
       </el-col>

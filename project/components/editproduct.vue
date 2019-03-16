@@ -4,7 +4,7 @@
       <div class="input_div">
         <el-input
           v-model="barcode"
-          placeholder="Input barcode,please..."
+          :placeholder="$t('input.placeHolder')"
           @keyup.enter.native="inputListener"
         >
           <el-button 

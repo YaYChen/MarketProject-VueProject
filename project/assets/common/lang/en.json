@@ -24,7 +24,33 @@
     "category": "Category",
     "specification": "Specification",
     "purchasePrice": "Purchase Price",
-    "price": "Price"
+    "price": "Price",
+    "quantity": "Quantity",
+    "totalPrice": "Total Price"
   },
-  "uploadImg":"Upload Img"
+  "productRule": {
+    "nameRule": "Input name,please...",
+    "categoryRule": "Select category,please...",
+    "specificationRule": "Input specification,please...",
+    "purchasePriceRule": "Input purchase Price,please...",
+    "priceRule": "Input price,please..."
+  },
+  "order": {
+    "serial": "Serial",
+    "createTime": "Create Time",
+    "status": "Status",
+    "totalQuantity": "Total Quantity",
+    "totalPrice": "Total Price"
+  },
+  "uploadImg":"Upload Img",
+  "dialogTitle": {
+    "shoppingList": "Shopping List"
+  },
+  "input": {
+    "placeHolder": "Input barcode,please..."
+  },
+  "message": {
+    "productNotFound": "Product not found...",
+    "settlementSuccess": "Shopping list settlement success!"
+  }
 }

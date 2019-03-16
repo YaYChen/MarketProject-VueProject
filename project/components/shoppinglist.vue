@@ -4,7 +4,7 @@
       <div class="input_div">
         <el-input
           v-model="barcode"
-          placeholder="Input barcode,please..."
+          :placeholder="$t('input.placeHolder')"
           @keyup.enter.native="inputListener"
         >
           <el-button 
@@ -36,41 +36,39 @@
 
     <el-dialog 
       :visible.sync="dialogVisible"
-      title="购物清单"
+      :title="$t('dialogTitle.shoppingList')"
       width="50%"
     >
       <div>
-        <div class="list_title_div">序号： {{ order.serial }}</div>
+        <div class="list_title_div">{{ $t('order.serial') }}： {{ order.serial }}</div>
       </div>
       <div>
         <el-table
           :data="productList"
           style="width: 100%">
           <el-table-column
-            prop="product.name"
-            label="名称"
-            width="180"/>
+            :label="$t('product.name')"
+            prop="product.name"/>
           <el-table-column
-            prop="product.category.name"
-            label="类别"
-            width="180"/>
+            :label="$t('product.category')"
+            prop="product.category.name"/>
           <el-table-column
-            prop="product.specification"
-            label="规格"/>
+            :label="$t('product.specification')"
+            prop="product.specification"/>
           <el-table-column
-            prop="product.price"
-            label="单价(￥)"/>
+            :label="$t('product.price')+'(￥)'"
+            prop="product.price"/>
           <el-table-column
-            prop="quantity"
-            label="数量"/>
+            :label="$t('product.quantity')"
+            prop="quantity"/>
           <el-table-column
-            prop="totalPrice"
-            label="总价(￥)"/>
+            :label="$t('product.totalPrice')+'(￥)'"
+            prop="totalPrice"/>
         </el-table>
       </div>
       <div class="list_footer_div">
-        <div class="list_footer_content_div">商品总量：{{ order.totalNumber }}</div>
-        <div class="list_footer_content_div">商品总价：{{ order.totalPrice }} ￥</div>
+        <div class="list_footer_content_div">{{ $t('order.totalQuantity') }}：{{ order.totalNumber }}</div>
+        <div class="list_footer_content_div">{{ $t('order.totalPrice') }}：{{ order.totalPrice }} ￥</div>
       </div>
       <span 
         slot="footer"
@@ -125,8 +123,19 @@ export default {
           }
         })
         .then(function(response) {
-          var product = response.data
-          vm.$store.dispatch('cart/addProductToCart', product)
+          let product = response.data
+          if (
+            response.data === null ||
+            response.data === undefined ||
+            response.data === ''
+          ) {
+            vm.$message({
+              message: vm.$t('message.productNotFound'),
+              type: 'warning'
+            })
+          } else {
+            vm.$store.dispatch('cart/addProductToCart', product)
+          }
           vm.barcode = ''
         })
         .catch(function(error) {
@@ -182,12 +191,12 @@ export default {
           }
         })
         .then(response => {
-          vm.$message({
-            message: 'Success!',
-            type: 'success'
-          })
           vm.$store.dispatch('cart/clearCart')
           vm.productList = vm.$store.state.cart.items
+          vm.$message({
+            message: vm.$t('message.settlementSuccess'),
+            type: 'success'
+          })
         })
         .catch(function(error) {
           vm.$message.error(error)

@@ -4,7 +4,7 @@
       <div class="input_div">
         <el-input
           v-model="barcode"
-          placeholder="Input barcode,please..."
+          :placeholder="$t('input.placeHolder')"
           @keyup.enter.native="inputListener"
         >
           <el-button 
@@ -59,7 +59,7 @@ export default {
             response.data === ''
           ) {
             vm.$message({
-              message: '未找到该产品...',
+              message: vm.$t('message.productNotFound'),
               type: 'warning'
             })
             vm.barcode = ''

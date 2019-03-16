@@ -24,7 +24,33 @@
     "category": "类别",
     "specification": "规格",
     "purchasePrice": "进价",
-    "price": "价格"
+    "price": "价格",
+    "quantity": "数量",
+    "totalPrice": "总价"
   },
-  "uploadImg":"上传图片"
+  "productRule": {
+    "nameRule": "请输入名称！",
+    "categoryRule": "请选择类别！",
+    "specificationRule": "请输入规格！",
+    "purchasePriceRule": "请输入进价！",
+    "priceRule": "请输入售价！"
+  },
+  "order": {
+    "serial": "序号",
+    "createTime": "创建时间",
+    "status": "清单状态",
+    "totalQuantity": "总数量",
+    "totalPrice": "总价格"
+  },
+  "uploadImg":"上传图片",
+  "dialogTitle": {
+    "shoppingList": "购物清单"
+  },
+  "input": {
+    "placeHolder": "请读取条码..."
+  },
+  "message": {
+    "productNotFound": "未找到该商品...",
+    "settlementSuccess": "购物清单结算成功！"
+  }
 }
