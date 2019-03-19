@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import common from '@/services/common.js'
+import utils from '@/services/common.js'
 
 export default {
   props: {
@@ -60,13 +60,12 @@ export default {
   },
   data() {
     return {
-      imgSrc: '',
-      common: common
+      imgSrc: ''
     }
   },
   created() {
     let vm = this
-    vm.imgSrc = vm.common.getImgFilePath(vm.item.product.productPicture)
+    vm.imgSrc = utils.getImgFilePath(vm.item.product.productPicture)
   },
   methods: {
     addQuantity() {

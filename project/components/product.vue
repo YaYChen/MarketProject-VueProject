@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import common from '@/services/common.js'
+import utils from '@/services/common.js'
 
 export default {
   props: {
@@ -42,7 +42,7 @@ export default {
   },
   created() {
     let vm = this
-    vm.imgSrc = common.getImgFilePath(vm.product.productPicture)
+    vm.imgSrc = utils.getImgFilePath(vm.product.productPicture)
   },
   methods: {}
 }

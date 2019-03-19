@@ -1,4 +1,4 @@
-export default {
+const utils = {
   //dev: http://localhost:8080
   //prod:http://101.132.123.27:8080
   getImgFilePath: function(imgName) {
@@ -32,3 +32,5 @@ export default {
     return dateString
   }
 }
+
+export default utils

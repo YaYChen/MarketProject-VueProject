@@ -86,7 +86,7 @@
 
 <script>
 import ListItem from '@/components/listitem.vue'
-import common from '@/services/common.js'
+import utils from '@/services/common.js'
 
 export default {
   components: {
@@ -98,7 +98,6 @@ export default {
       dialogVisible: false,
       barcode: '',
       order: {},
-      common: common,
       userID: 1
     }
   },
@@ -158,7 +157,7 @@ export default {
       vm.$store.dispatch('cart/getTotalNumber')
       let date = new Date()
       vm.order = {
-        serial: vm.common.getDateString(date),
+        serial: utils.getDateString(date),
         createTime: '',
         createUser: { id: vm.userID },
         status: 'Done',

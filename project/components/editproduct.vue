@@ -85,6 +85,7 @@ export default {
     disableEditer: function() {
       var vm = this
       vm.showProduct = false
+      vm.product = ''
       vm.barcode = ''
     },
     cancel: function() {

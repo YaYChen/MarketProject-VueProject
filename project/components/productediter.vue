@@ -7,7 +7,7 @@
         :on-success="handleAvatarSuccess"
         :on-error="handleAvatarFaile"
         :before-upload="beforeAvatarUpload"
-        :action="common.imgUploadPath"
+        :action="imgUploadPath"
         class="avatar-uploader"
       >
         <img 
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import common from '@/services/common.js'
+import utils from '@/services/common.js'
 
 export default {
   props: {
@@ -86,40 +86,40 @@ export default {
       selectCategories: [],
       selectValue: '',
       imageUrl: '',
-      common: common,
+      imgUploadPath: utils.imgUploadPath,
       rules: {
         name: [
           {
             required: true,
-            message: $t('productRule.nameRule'),
+            message: this.$t('productRule.nameRule'),
             trigger: 'blur'
           }
         ],
         category: [
           {
             required: true,
-            message: $t('productRule.categoryRule'),
+            message: this.$t('productRule.categoryRule'),
             trigger: 'blur'
           }
         ],
         specification: [
           {
             required: true,
-            message: $t('productRule.specificationRule'),
+            message: this.$t('productRule.specificationRule'),
             trigger: 'blur'
           }
         ],
         purchasePrice: [
           {
             required: true,
-            message: $t('productRule.purchasePriceRule'),
+            message: this.$t('productRule.purchasePriceRule'),
             trigger: 'blur'
           }
         ],
         price: [
           {
             required: true,
-            message: $t('productRule.priceRule'),
+            message: this.$t('productRule.priceRule'),
             trigger: 'blur'
           }
         ]
@@ -127,8 +127,8 @@ export default {
     }
   },
   created: function() {
-    var vm = this
-    this.$axios
+    let vm = this
+    vm.$axios
       .get('/getCategories')
       .then(response => {
         vm.selectCategories = response.data
@@ -138,7 +138,7 @@ export default {
       })
     vm.orginalProduct = vm.product
     vm.selectValue = vm.product.category.id
-    vm.imageUrl = vm.productPicture
+    vm.imageUrl = utils.getImgFilePath(vm.product.productPicture)
   },
   methods: {
     submit: function() {
@@ -157,7 +157,6 @@ export default {
               })
               .then(response => {
                 alert(response.data.message)
-                vm.product = ''
               })
               .catch(function(error) {
                 alert(error)
@@ -187,9 +186,7 @@ export default {
       }
     },
     hiddenForm: function() {
-      let vm = this
-      vm.product = ''
-      vm.onCancel()
+      this.$emit('disableEditer')
     },
     cancel: function() {
       this.$emit('disableEditer')
