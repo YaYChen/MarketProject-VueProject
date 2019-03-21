@@ -2,7 +2,7 @@
   <div class="product_box">
     <div class="product_picture_box">
       <img 
-        :src="imgSrc"
+        :src="updateImg(product.productPicture)"
         class="img_picture"
       >
     </div>
@@ -36,15 +36,14 @@ export default {
     }
   },
   data: function() {
-    return {
-      imgSrc: ''
+    return {}
+  },
+  created() {},
+  methods: {
+    updateImg: function(filename) {
+      return utils.getImgFilePath(filename)
     }
-  },
-  created() {
-    let vm = this
-    vm.imgSrc = utils.getImgFilePath(vm.product.productPicture)
-  },
-  methods: {}
+  }
 }
 </script>
 

@@ -21,7 +21,7 @@
     >
       <product-component
         v-if="showProduct"
-        ref="product_view"
+        ref="productview"
         :product="product"
       />
     </div>
