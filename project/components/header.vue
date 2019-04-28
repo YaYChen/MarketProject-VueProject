@@ -86,6 +86,9 @@ export default {
         case '2':
           this.$router.push({ name: 'list' })
           break
+        case '3-4':
+          this.$router.push({ name: 'supplier' })
+          break
         default:
           break
       }
@@ -164,7 +167,7 @@ export default {
   line-height: 65px;
   height: 100%;
 }
-.el-icon-arrow-down {
-  font-size: 20px;
+.el-menu--horizontal >>> .el-submenu .el-submenu__icon-arrow {
+  visibility: hidden;
 }
 </style>
