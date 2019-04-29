@@ -53,5 +53,21 @@
   "message": {
     "productNotFound": "未找到该商品...",
     "settlementSuccess": "购物清单结算成功！"
+  },
+  "dialog": {
+    "titleAdd": "添加",
+    "titleEdit": "编辑"
+  },
+  "supplierRule": {
+    "nameRule": "请输入供应商名称...",
+    "brandRule": "请输入供应商品牌...",
+    "phoneRule": "请输入供应商联系电话..."
+  },
+  "operate": {
+    "add": "添加",
+    "cancel": "取消",
+    "edit": "编辑",
+    "commit": "提交",
+    "delete": "删除"
   }
 }

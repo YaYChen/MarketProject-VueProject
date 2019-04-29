@@ -46,7 +46,7 @@ export default {
   methods: {
     inputListener: function() {
       var vm = this
-      this.$axios
+      vm.$axios
         .get('/product-ByCode', {
           params: {
             code: vm.barcode

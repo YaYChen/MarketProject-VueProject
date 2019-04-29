@@ -22,7 +22,8 @@
       </el-upload>
     </div>
     <el-form
-      :model="product" 
+      :model="product"
+      :rule="rules"
       label-position="top" 
       label-width="80px" 
     >

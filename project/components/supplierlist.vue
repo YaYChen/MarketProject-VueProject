@@ -3,7 +3,7 @@
     <div class="button_container">
       <el-button 
         plain
-        @click="addDialogVisible=true">{{ $t("button.add") }}</el-button>
+        @click="addNewSupplier">{{ $t("button.add") }}</el-button>
     </div>
     <div class="card_container">
       <el-row :gutter="10">
@@ -16,9 +16,9 @@
               <div class="card_operate_div">
                 <div class="operate_item_div right_item">
                   <el-tooltip 
-                    class="item" 
-                    effect="dark" 
-                    content="删除" 
+                    :content="$t('operate.delete')"
+                    class="item"
+                    effect="dark"
                     placement="top">
                     <i
                       class="el-icon-delete"
@@ -27,9 +27,9 @@
                 </div>
                 <div class="operate_item_div">
                   <el-tooltip 
-                    class="item" 
-                    effect="dark" 
-                    content="编辑" 
+                    :content="$t('operate.edit')"
+                    class="item"
+                    effect="dark"
                     placement="top">
                     <i
                       class="el-icon-edit"
@@ -38,7 +38,11 @@
                 </div>
               </div>
               <div>
-                <div class="detial_img_div">123</div>
+                <div class="detial_img_div">
+                  <img
+                    :src="item.picture"
+                    class="img_picture">
+                </div>
               </div>
               <div>
                 <div>
@@ -51,7 +55,7 @@
                 </div>
                 <div>
                   <div class="detial_info_title_div">Phone:</div>
-                  <div class="detial_info_div">{{ item.tell }}</div>
+                  <div class="detial_info_div">{{ item.phone }}</div>
                 </div>
               </div>
             </div>
@@ -98,7 +102,7 @@
               <el-input v-model="onEditSupplier.brand"/>
             </el-form-item>
             <el-form-item label="Phone:">
-              <el-input v-model="onEditSupplier.tell"/>
+              <el-input v-model="onEditSupplier.phone"/>
             </el-form-item>
           </el-form>
         </div>
@@ -110,10 +114,9 @@
           @click="dialogVisible = false">{{ $t("button.cancel") }}</el-button>
         <el-button 
           type="primary" 
-          @click="dialogClose">{{ $t("button.confirm") }}</el-button>
+          @click="dialogCommit">{{ $t("button.confirm") }}</el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 
@@ -123,49 +126,63 @@ import utils from '@/services/common.js'
 export default {
   data() {
     return {
-      supplierList: [
-        {
-          id: 0,
-          name: 'zhangsan',
-          brand: 'GUCCI',
-          tell: '123456789'
-        },
-        {
-          id: 1,
-          name: 'lisi',
-          brand: 'CHANEL',
-          tell: '987654321'
-        },
-        {
-          id: 2,
-          name: 'lisi',
-          brand: 'CHANEL',
-          tell: '987654321'
-        },
-        {
-          id: 3,
-          name: 'lisi',
-          brand: 'CHANEL',
-          tell: '987654321'
-        }
-      ],
+      supplierList: [],
       onEditSupplier: {},
       dialogVisible: false,
       dialogTitle: '添加',
       imgUploadPath: utils.imgUploadPath,
-      imageUrl: ''
+      imageUrl: '',
+      rules: {
+        name: [
+          {
+            required: true,
+            message: this.$t('supplierRule.nameRule'),
+            trigger: 'blur'
+          }
+        ],
+        brand: [
+          {
+            required: true,
+            message: this.$t('supplierRule.brandRule'),
+            trigger: 'blur'
+          }
+        ],
+        phone: [
+          {
+            required: true,
+            message: this.$t('supplierRule.phoneRule'),
+            trigger: 'blur'
+          }
+        ]
+      }
     }
   },
-  create() {},
+  created() {
+    let vm = this
+    vm.loadSuppliers()
+  },
   methods: {
-    addDialogClose() {
+    loadSuppliers() {
       let vm = this
-      vm.$confirm('确认关闭？')
-        .then(_ => {
-          alert('HelloWorld')
-          vm.dialogVisible = false
+      vm.supplierList = []
+      vm.$axios
+        .get('/getAllSupplier')
+        .then(function(response) {
+          let list = response.data
+          list.forEach(element => {
+            let supplier = {
+              id: element.id,
+              name: element.name,
+              brand: element.brand,
+              phone: element.phone,
+              picture: utils.getImgFilePath(element.picture)
+            }
+            vm.supplierList.push(supplier)
+          })
         })
-        .catch(_ => {})
+        .catch(function(error) {
+          console.log(error)
+        })
     },
     handleAvatarSuccess: function(response, file) {
       let vm = this
@@ -191,19 +208,91 @@ export default {
     handleAvatarFaile: function(err, file, fileList) {
       console.log('err: ' + err)
     },
-    deleteSupplier(id) {},
+    deleteSupplier(id) {
+      let vm = this
+      vm.$axios
+        .delete('/deleteSupplier', {
+          params: {
+            id: id
+          }
+        })
+        .then(function(response) {
+          if (response.data.message === 'Success!') {
+            vm.loadSuppliers()
+            alert(response.data.message)
+          } else {
+            alert(response.data.message)
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
     editSupplier(id) {
       let vm = this
+      vm.dialogTitle = vm.$t('dialog.titleEdit')
       vm.supplierList.forEach(element => {
         if (element.id === id) {
-          vm.onEditSupplier = element
+          vm.onEditSupplier = {
+            id: element.id,
+            name: element.name,
+            brand: element.brand,
+            phone: element.phone,
+            picture: element.picture
+          }
         }
       })
+      vm.imageUrl = vm.onEditSupplier.picture
       vm.dialogVisible = true
     },
-    dialogClose() {
+    dialogCommit() {
       let vm = this
+      if (vm.onEditSupplier.id != null && vm.onEditSupplier.id != '') {
+        var postData = JSON.stringify(vm.onEditSupplier)
+        vm.$axios
+          .post('/updateSupplier', postData, {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
+            }
+          })
+          .then(response => {
+            if (response.data.message === 'Success!') {
+              vm.loadSuppliers()
+              alert(response.data.message)
+            } else {
+              alert(response.data.message)
+            }
+          })
+          .catch(function(error) {
+            alert(error)
+          })
+      } else {
+        var postData = JSON.stringify(vm.onEditSupplier)
+        vm.$axios
+          .post('/insertSupplier', postData, {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
+            }
+          })
+          .then(response => {
+            if (response.data.message === 'Success!') {
+              vm.loadSuppliers()
+              alert(response.data.message)
+            } else {
+              alert(response.data.message)
+            }
+          })
+          .catch(function(error) {
+            alert(error)
+          })
+      }
       vm.dialogVisible = false
+    },
+    addNewSupplier() {
+      let vm = this
+      vm.dialogTitle = vm.$t('dialog.titleAdd')
+      vm.onEditSupplier = {}
+      vm.dialogVisible = true
     }
   }
 }
@@ -259,7 +348,10 @@ export default {
   margin: 10px auto;
   height: 200px;
   width: 180px;
-  background: lightgreen;
+}
+.img_picture {
+  width: 100%;
+  height: 100%;
 }
 .card_operate_div {
   text-align: right;

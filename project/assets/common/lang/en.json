@@ -53,5 +53,21 @@
   "message": {
     "productNotFound": "Product not found...",
     "settlementSuccess": "Shopping list settlement success!"
+  },
+  "dialog": {
+    "titleAdd": "Add",
+    "titleEdit": "Edit"
+  },
+  "supplierRule": {
+    "nameRule": "Input name,please...",
+    "brandRule": "Input brand,please...",
+    "phoneRule": "Input phone,please..."
+  },
+  "operate": {
+    "add": "Add",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "commit": "Commit",
+    "delete": "Delete"
   }
 }
