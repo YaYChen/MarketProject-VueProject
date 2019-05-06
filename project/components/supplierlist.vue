@@ -46,15 +46,15 @@
               </div>
               <div>
                 <div>
-                  <div class="detial_info_title_div">Name:</div>
+                  <div class="detial_info_title_div">{{ $t("supplier.name") }}: </div>
                   <div class="detial_info_div">{{ item.name }}</div>
                 </div>
                 <div>
-                  <div class="detial_info_title_div">Brand:</div>
+                  <div class="detial_info_title_div">{{ $t("supplier.brand") }}: </div>
                   <div class="detial_info_div">{{ item.brand }}</div>
                 </div>
                 <div>
-                  <div class="detial_info_title_div">Phone:</div>
+                  <div class="detial_info_title_div">{{ $t("supplier.phone") }}: </div>
                   <div class="detial_info_div">{{ item.phone }}</div>
                 </div>
               </div>

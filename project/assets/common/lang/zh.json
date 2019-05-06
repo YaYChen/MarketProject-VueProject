@@ -58,6 +58,11 @@
     "titleAdd": "添加",
     "titleEdit": "编辑"
   },
+  "supplier": {
+    "name": "姓名",
+    "brand": "品牌",
+    "phone": "电话"
+  },
   "supplierRule": {
     "nameRule": "请输入供应商名称...",
     "brandRule": "请输入供应商品牌...",

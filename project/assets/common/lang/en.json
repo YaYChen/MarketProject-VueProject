@@ -58,6 +58,11 @@
     "titleAdd": "Add",
     "titleEdit": "Edit"
   },
+  "supplier": {
+    "name": "Name",
+    "brand": "Brand",
+    "phone": "Phone"
+  },
   "supplierRule": {
     "nameRule": "Input name,please...",
     "brandRule": "Input brand,please...",

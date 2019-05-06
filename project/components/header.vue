@@ -80,11 +80,14 @@ export default {
         case '1':
           this.$router.push({ name: 'index' })
           break
+        case '2':
+          this.$router.push({ name: 'list' })
+          break
         case '3-1':
           this.$router.push({ name: 'product' })
           break
-        case '2':
-          this.$router.push({ name: 'list' })
+        case '3-2':
+          this.$router.push({ name: 'sales' })
           break
         case '3-4':
           this.$router.push({ name: 'supplier' })
