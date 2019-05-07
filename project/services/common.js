@@ -29,6 +29,20 @@ const utils = {
     dateString = dateString + date.getHours()
     dateString = dateString + date.getMinutes()
     dateString = dateString + date.getSeconds()
+    let strlength = dateString.length
+    for (let i = strlength; i < 13; i++) {
+      dateString += '0'
+    }
+    return dateString
+  },
+  getDateStringForShow(date) {
+    let dateString = ''
+    dateString = dateString + date.getFullYear() + '-'
+    dateString = dateString + date.getMonth() + '-'
+    dateString = dateString + date.getDate() + ' '
+    dateString = dateString + date.getHours() + ':'
+    dateString = dateString + date.getMinutes() + ':'
+    dateString = dateString + date.getSeconds()
     return dateString
   }
 }
