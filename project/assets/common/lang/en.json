@@ -41,7 +41,8 @@
     "createTime": "Create Time",
     "status": "Status",
     "totalQuantity": "Total Quantity",
-    "totalPrice": "Total Price"
+    "totalPrice": "Total Price",
+    "createUser": "User"
   },
   "uploadImg":"Upload Img",
   "dialogTitle": {
@@ -74,5 +75,15 @@
     "edit": "Edit",
     "commit": "Commit",
     "delete": "Delete"
+  },
+  "tabPanel": {
+    "historyList": "History List",
+    "historySales": "History Sales"
+  },
+  "datePicker": {
+    "title": "Date Selecter",
+    "rangeSeparator": "To",
+    "startPlaceholder": "Start",
+    "endPlaceholder": "End"
   }
 }

@@ -41,7 +41,8 @@
     "createTime": "创建时间",
     "status": "清单状态",
     "totalQuantity": "总数量",
-    "totalPrice": "总价格"
+    "totalPrice": "总价格",
+    "createUser": "创建用户"
   },
   "uploadImg":"上传图片",
   "dialogTitle": {
@@ -74,5 +75,15 @@
     "edit": "编辑",
     "commit": "提交",
     "delete": "删除"
+  },
+  "tabPanel": {
+    "historyList": "历史清单",
+    "historySales": "历史销量"
+  },
+  "datePicker": {
+    "title": "日期选择",
+    "rangeSeparator": "至",
+    "startPlaceholder": "开始日期",
+    "endPlaceholder": "结束日期"
   }
 }
