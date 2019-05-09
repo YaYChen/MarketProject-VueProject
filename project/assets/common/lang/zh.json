@@ -18,7 +18,8 @@
     "cancel": "取消",
     "confirm": "确认",
     "settlement": "结算",
-    "add":"添加"
+    "add":"添加",
+    "inquire": "查询"
   },
   "product": {
     "name": "名称",
@@ -85,5 +86,6 @@
     "rangeSeparator": "至",
     "startPlaceholder": "开始日期",
     "endPlaceholder": "结束日期"
-  }
+  },
+  "index": "序号"
 }

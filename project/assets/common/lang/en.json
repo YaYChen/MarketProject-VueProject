@@ -18,7 +18,8 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "settlement": "Settlement",
-    "add":"Add"
+    "add":"Add",
+    "inquire": "Inquire"
   },
   "product": {
     "name": "Name",
@@ -85,5 +86,6 @@
     "rangeSeparator": "To",
     "startPlaceholder": "Start",
     "endPlaceholder": "End"
-  }
+  },
+  "index": "Index"
 }

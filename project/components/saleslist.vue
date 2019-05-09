@@ -1,15 +1,24 @@
 <template>
   <div class="layout_center">
     <div class="date_picker_div">
-      <div class="date_picker_title_div">{{ $t('datePicker.title') }}: </div>
-      <div class="date_picker_content_div">
-        <el-date-picker
-          v-model="daterange"
-          :range-separator="$t('datePicker.rangeSeparator')"
-          :start-placeholder="$t('datePicker.startPlaceholder')"
-          :end-placeholder="$t('datePicker.endPlaceholder')"
-          type="daterange"/>
-      </div>
+      <el-row>
+        <el-col :span="6">
+          <div class="date_picker_title_div">{{ $t('datePicker.title') }}: </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="date_picker_content_div">
+            <el-date-picker
+              v-model="daterange"
+              :range-separator="$t('datePicker.rangeSeparator')"
+              :start-placeholder="$t('datePicker.startPlaceholder')"
+              :end-placeholder="$t('datePicker.endPlaceholder')"
+              type="daterange"/>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <el-button type="primary">{{ $t('button.inquire') }}</el-button>
+        </el-col>
+      </el-row>
     </div>
     <div class="content_div">
       <el-tabs 
@@ -105,7 +114,31 @@
           :label="$t('tabPanel.historySales')"
           name="second">
           <div class="tab_content_div">
-            历史销量
+            <el-table
+              :data="boardlist"
+              style="width: 100%">
+              <el-table-column
+                :label="$t('index')"
+                type="index"
+                width="100px"
+                align="center"/>
+              <el-table-column
+                :label="$t('product.name')"
+                property="product.name"
+                width="225px"/>
+              <el-table-column
+                :label="$t('product.category')"
+                property="product.category.name"
+                width="225px"/>
+              <el-table-column
+                :label="$t('product.specification')"
+                property="product.specification"
+                width="225px"/>
+              <el-table-column
+                :label="$t('product.quantity')"
+                property="nums"
+                width="225px"/>
+            </el-table>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -123,7 +156,8 @@ export default {
       activeName: 'first',
       list: [],
       listitem: [],
-      showitem: false
+      showitem: false,
+      boardlist: []
     }
   },
   created() {
@@ -132,7 +166,12 @@ export default {
   },
   methods: {
     tabClick(tab, event) {
-      console.log(tab.name)
+      let vm = this
+      if (tab.name === 'second') {
+        if (vm.boardlist.length === 0) {
+          vm.getBoardList()
+        }
+      }
     },
     getAllList() {
       let vm = this
@@ -146,6 +185,11 @@ export default {
             element.createTime = utils.getDateStringForShow(
               new Date(element.createTime)
             )
+            element.orderItems.forEach(subitem => {
+              subitem.product.productPicture = utils.getImgFilePath(
+                subitem.product.productPicture
+              )
+            })
           })
         })
         .catch(function(error) {
@@ -159,16 +203,22 @@ export default {
         if (element.id === id) {
           element.isActive = true
           vm.listitem = element
-          vm.listitem.orderItems.forEach(subitem => {
-            subitem.product.productPicture = utils.getImgFilePath(
-              subitem.product.productPicture
-            )
-          })
         } else {
           element.isActive = false
         }
       })
       vm.showitem = true
+    },
+    getBoardList() {
+      let vm = this
+      vm.$axios
+        .get('/getWholeSalesVolume')
+        .then(function(response) {
+          vm.boardlist = response.data
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
     }
   }
 }
@@ -193,7 +243,6 @@ export default {
   font-size: 30px;
   font-family: 'Microsoft YaHei';
   text-align: left;
-  float: left;
 }
 .date_picker_content_div {
   height: 40px;
@@ -308,5 +357,19 @@ export default {
   font-family: 'Microsoft YaHei';
   font-size: 20px;
   color: black;
+}
+.el-button {
+  height: 40px;
+  width: 150px;
+}
+.el-button--primary {
+  color: #fff;
+  background-color: black;
+  border-color: black;
+}
+.el-button--primary:hover {
+  color: black;
+  background-color: white;
+  border-color: black;
 }
 </style>
