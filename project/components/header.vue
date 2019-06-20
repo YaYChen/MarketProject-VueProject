@@ -1,63 +1,68 @@
 <template>
   <div class="layout_header">
     <div class="layout_box">
-      <div class="header_logo">
-        <h1>Market</h1>
-      </div>
-      <div class="header_nav">
-        <el-menu
-          :default-active="activeIndex"
-          class="nav_menu_style"
-          mode="horizontal"
-          background-color="#ffffff"
-          text-color="#777777"
-          active-text-color="#000000"
-          @select="handleSelect"
-        >
-          <el-menu-item 
-            index="1" 
-            class="nav_menu_item"
-          >{{ $t('navbar.home') }}</el-menu-item>
-          <el-menu-item 
-            index="2" 
-            class="nav_menu_item"
-          >{{ $t('navbar.shoppingList') }}</el-menu-item>
-          <el-submenu index="3">
-            <p 
-              slot="title" 
-              class="nav_menu_item"
-            >{{ $t('navbar.manager') }}</p>
-            <el-menu-item
-              index="3-1"
-              class="nav_menu_item"
-            >{{ $t('navbar.managers.product') }}</el-menu-item>
-            <el-menu-item 
-              index="3-2" 
-              class="nav_menu_item"
-            >{{ $t('navbar.managers.list') }}</el-menu-item>
-            <el-menu-item 
-              index="3-3"
-              class="nav_menu_item"
-            >{{ $t('navbar.managers.storge') }}</el-menu-item>
-            <el-menu-item 
-              index="3-4" 
-              class="nav_menu_item"
-            >{{ $t('navbar.managers.supplier') }}</el-menu-item>
-          </el-submenu>
-        </el-menu>
-      </div>
-      <div class="header_globalization">
-        <el-dropdown @command="handleCommand">
-          <span class="el-dropdown-link">
-            {{ $t('language.name') }}
-            <i class="el-icon-arrow-down el-icon--right"/>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="a">中文</el-dropdown-item>
-            <el-dropdown-item command="b">English</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
+      <el-row>
+        <el-col :span="4">
+          <div class="header_logo">
+            Market
+          </div>
+        </el-col>
+        <el-col :span="14">
+          <div>
+            <el-menu
+              :default-active="activeIndex"
+              mode="horizontal"
+              background-color="#ffffff"
+              text-color="#777777"
+              active-text-color="#000000"
+              @select="handleSelect"
+            >
+              <el-menu-item 
+                index="1" 
+              >{{ $t('navbar.home') }}</el-menu-item>
+              <el-menu-item 
+                index="2" 
+              >{{ $t('navbar.shoppingList') }}</el-menu-item>
+              <el-submenu index="3">
+                <p 
+                  slot="title" 
+                >{{ $t('navbar.manager') }}</p>
+                <el-menu-item
+                  index="3-1"
+                >{{ $t('navbar.managers.product') }}</el-menu-item>
+                <el-menu-item 
+                  index="3-2" 
+                >{{ $t('navbar.managers.list') }}</el-menu-item>
+                <el-menu-item 
+                  index="3-3"
+                >{{ $t('navbar.managers.storge') }}</el-menu-item>
+                <el-menu-item 
+                  index="3-4" 
+                >{{ $t('navbar.managers.supplier') }}</el-menu-item>
+              </el-submenu>
+            </el-menu>
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <div class="header_globalization">
+            <el-dropdown @command="handleCommand">
+              <span class="el-dropdown-link">
+                {{ $t('language.name') }}
+                <i class="el-icon-arrow-down el-icon--right"/>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="a">中文</el-dropdown-item>
+                <el-dropdown-item command="b">English</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <div class="header_login">
+            <el-link @click="signIn">Sign In</el-link>
+          </div>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -107,6 +112,9 @@ export default {
         default:
           break
       }
+    },
+    signIn() {
+      this.$router.push({ name: 'login' })
     }
   }
 }
@@ -120,45 +128,23 @@ export default {
   margin-bottom: 10px;
   border-top: 3px solid black;
   border-bottom: 1px solid gray;
-  padding: 1px;
   text-align: center;
 }
 .layout_box {
   margin: 0 auto;
   width: 1200px;
   height: 70px;
+  padding: 1px;
 }
 .header_logo {
-  width: 200px;
-  height: 100%;
-  float: left;
-}
-.header_nav {
-  width: 800px;
-  height: 100%;
-  float: left;
-}
-.nav_menu_style {
-  width: 100%;
-  height: 100%;
-}
-.nav_menu_item {
-  height: 100%;
+  height: 70px;
+  line-height: 70px;
   font-family: 'Microsoft YaHei';
-  font-size: 20px;
-}
-.el-menu--horizontal > .el-submenu {
-  height: 100%;
-}
-.el-menu--horizontal > .el-submenu >>> .el-submenu__title {
-  height: 100%;
+  font-size: 30px;
+  font-weight: bold;
 }
 .header_globalization {
-  height: 100%;
-  width: 199;
-  float: left;
-  border-left: 1px solid gray;
-  padding-left: 10px;
+  border-right: 1px solid gray;
 }
 .header_globalization span {
   display: block;
@@ -167,10 +153,19 @@ export default {
   cursor: pointer;
   font-family: 'Microsoft YaHei';
   font-size: 20px;
-  line-height: 65px;
-  height: 100%;
+  line-height: 70px;
+  height: 70px;
 }
-.el-menu--horizontal >>> .el-submenu .el-submenu__icon-arrow {
-  visibility: hidden;
+.el-menu--horizontal >>> .el-submenu .el-submenu__title {
+  height: 70px;
+  font-size: 20px;
+}
+.el-menu--horizontal >>> .el-menu-item {
+  height: 70px;
+  font-size: 20px;
+}
+.header_login {
+  height: 70px;
+  line-height: 70px;
 }
 </style>

@@ -44,6 +44,7 @@ export default {
   transform: translateX(-50%);
   font-size: 30px;
   font-family: 'Microsoft YaHei';
+  font-weight: bold;
 }
 .div_down {
   background: black;

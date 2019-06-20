@@ -1,12 +1,12 @@
 const state = {
-  token:'',
-  user:{}
+  token: '',
+  user: {}
 }
 
 // actions
 const actions = {
   addUser({ state, commit }, user) {
-    commit('addUserID',user)
+    commit('addUserID', user)
   },
 
   addToken({ state, commit }, token) {
@@ -28,7 +28,6 @@ const mutations = {
 export default {
   namespaced: true,
   state,
-  getters,
   actions,
   mutations
 }
