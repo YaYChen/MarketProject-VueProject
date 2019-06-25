@@ -15,19 +15,22 @@
               :rules="rules" >
               <el-form-item 
                 label="User Name" 
-                prop="name">
-                <el-input/>
+                prop="username">
+                <el-input v-model="login_user.username"/>
               </el-form-item>
               <el-form-item 
                 label="Password" 
                 prop="password">
-                <el-input type="password"/>
+                <el-input
+                  v-model="login_user.password"
+                  type="password"/>
               </el-form-item>              
               <el-form-item>
                 <el-button 
                   class="login_button"
                   type="primary" 
-                  round>Sign In</el-button>
+                  round
+                  @click="loginIn">Sign In</el-button>
               </el-form-item>
               <el-form-item>
                 <div class="SignUp_tips">
@@ -58,11 +61,11 @@ export default {
   data: function() {
     return {
       login_user: {
-        name: '',
+        username: '',
         password: ''
       },
       rules: {
-        name: [
+        username: [
           { required: true, message: '请输入用户名称', trigger: 'blur' },
           { min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur' }
         ],
@@ -72,7 +75,30 @@ export default {
       }
     }
   },
-  methods: {}
+  created() {},
+  methods: {
+    loginIn() {
+      let vm = this
+      var postData = JSON.stringify(vm.login_user)
+      vm.$axios
+        .post('/sign-in', postData, {
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+          }
+        })
+        .then(({ data }) => {
+          if (data.message != 'Success!') {
+            vm.$message.error(data.message)
+          } else {
+            vm.$store.dispatch('user/addToken', data.token)
+            console.log(vm.$store.state.user.token)
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+    }
+  }
 }
 </script>
 

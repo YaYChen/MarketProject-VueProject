@@ -3,6 +3,13 @@ const state = {
   user: {}
 }
 
+// getters
+const getters = {
+  cartProducts: (state, getters) => {
+    return state.token
+  }
+}
+
 // actions
 const actions = {
   addUser({ state, commit }, user) {
@@ -28,6 +35,7 @@ const mutations = {
 export default {
   namespaced: true,
   state,
+  getters,
   actions,
   mutations
 }
