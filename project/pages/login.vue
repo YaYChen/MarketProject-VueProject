@@ -90,8 +90,13 @@ export default {
           if (data.message != 'Success!') {
             vm.$message.error(data.message)
           } else {
-            vm.$store.dispatch('user/addToken', data.token)
-            console.log(vm.$store.state.user.token)
+            let user = {
+              userId: data.userId,
+              username: data.username,
+              token: data.token
+            }
+            vm.$store.dispatch('user/addUser', user)
+            vm.$router.back(-1)
           }
         })
         .catch(function(error) {

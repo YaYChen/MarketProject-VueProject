@@ -30,6 +30,7 @@
 
 <script>
 import Product from '@/components/product.vue'
+import axiosService from '@/services/axios-service.js'
 
 export default {
   components: {
@@ -47,7 +48,7 @@ export default {
     inputListener: function() {
       var vm = this
       vm.$axios
-        .get('/product-ByCode', {
+        .get('/p/product-ByCode', {
           params: {
             code: vm.barcode
           }

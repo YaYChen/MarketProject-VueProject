@@ -1,34 +1,39 @@
 const state = {
-  token: '',
-  user: {}
+  user: {
+    userId: '',
+    username: '',
+    token: ''
+  }
 }
 
 // getters
 const getters = {
   cartProducts: (state, getters) => {
-    return state.token
+    return state.user
   }
 }
 
 // actions
 const actions = {
   addUser({ state, commit }, user) {
-    commit('addUserID', user)
+    commit('addUser', user)
   },
-
-  addToken({ state, commit }, token) {
-    commit('addToken', token)
+  deleteUser({ state, commit }) {
+    commit('deleteUser')
   }
 }
 
 // mutations
 const mutations = {
   addUser(state, user) {
-    state.userID = user
+    state.user = user
   },
-
-  addToken(state, token) {
-    state.token = token
+  deleteUser(state) {
+    state.user = {
+      userId: '',
+      username: '',
+      token: ''
+    }
   }
 }
 

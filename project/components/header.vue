@@ -58,8 +58,24 @@
           </div>
         </el-col>
         <el-col :span="3">
-          <div class="header_login">
+          <div 
+            v-if="user.username === ''" 
+            class="header_login">
             <el-link @click="signIn">Sign In</el-link>
+          </div>
+          <div 
+            v-else 
+            class="header_login">
+            <el-dropdown @command="handleCommanduser">
+              <span class="el-dropdown-link">
+                {{ user.username }}
+                <i class="el-icon-arrow-down el-icon--right"/>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="a">Sing Out</el-dropdown-item>
+                <el-dropdown-item command="b">Detial</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </div>
         </el-col>
       </el-row>
@@ -76,9 +92,18 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      user: {
+        userId: '',
+        username: ''
+      }
+    }
   },
-  created() {},
+  created() {
+    let vm = this
+    vm.user.userId = vm.$store.state.user.user.userId
+    vm.user.username = vm.$store.state.user.user.username
+  },
   methods: {
     handleSelect(key, keyPath) {
       switch (key) {
@@ -113,9 +138,30 @@ export default {
           break
       }
     },
+    handleCommanduser(command) {
+      switch (command) {
+        case 'a':
+          this.signOut()
+          break
+        case 'b':
+          this.showDetial()
+          break
+        default:
+          break
+      }
+    },
     signIn() {
       this.$router.push({ name: 'login' })
-    }
+    },
+    signOut() {
+      let vm = this
+      vm.user = {
+        userId: '',
+        username: ''
+      }
+      vm.$store.dispatch('user/deleteUser')
+    },
+    showDetial() {}
   }
 }
 </script>
