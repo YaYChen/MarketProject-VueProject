@@ -61,7 +61,7 @@
           <div 
             v-if="user.username === ''" 
             class="header_login">
-            <el-link @click="signIn">Sign In</el-link>
+            <a @click="signIn">Sign In</a>
           </div>
           <div 
             v-else 

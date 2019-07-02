@@ -3,6 +3,7 @@ const pkg = require('./package')
 module.exports = {
   mode: 'universal',
 
+  loading: { color: '#000000' },
   /*
   ** Headers of the page
   */
@@ -35,7 +36,7 @@ module.exports = {
   */
   plugins: [
     '@/plugins/element-ui',
-    '@/plugins/VueI18n.js'
+    '@/plugins/VueI18n'
   ],
 
   /*
@@ -55,6 +56,9 @@ module.exports = {
     baseURL: 'http://localhost:8080'
   },
 
+  router: {
+    middleware: 'auth'
+  },
   /*
   ** Build configuration
   */

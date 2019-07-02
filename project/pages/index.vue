@@ -22,6 +22,7 @@ export default {
       activeIndex: '1'
     }
   },
+  created() {},
   methods: {}
 }
 </script>
