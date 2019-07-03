@@ -36,7 +36,9 @@ module.exports = {
   */
   plugins: [
     '@/plugins/element-ui',
-    '@/plugins/VueI18n'
+    '@/plugins/VueI18n',
+    '@/plugins/route',
+    '@/plugins/axios'
   ],
 
   /*
@@ -53,12 +55,9 @@ module.exports = {
     // See https://github.com/nuxt-community/axios-module#options
     //dev: http://localhost:8080
     //prod:http://101.132.123.27:8080
-    baseURL: 'http://localhost:8080'
+    //baseURL: 'http://localhost:8080'
   },
 
-  router: {
-    middleware: 'auth'
-  },
   /*
   ** Build configuration
   */

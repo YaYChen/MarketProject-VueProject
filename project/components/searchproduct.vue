@@ -30,7 +30,6 @@
 
 <script>
 import Product from '@/components/product.vue'
-import axiosService from '@/services/axios-service.js'
 
 export default {
   components: {
