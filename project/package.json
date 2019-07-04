@@ -2,7 +2,7 @@
   "name": "project",
   "version": "1.0.0",
   "description": "My finest Nuxt.js project",
-  "author": "Private Chen",
+  "author": "Yayun Chen",
   "private": true,
   "scripts": {
     "dev": "nuxt",

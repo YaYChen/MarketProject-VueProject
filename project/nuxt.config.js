@@ -55,7 +55,8 @@ module.exports = {
     // See https://github.com/nuxt-community/axios-module#options
     //dev: http://localhost:8080
     //prod:http://101.132.123.27:8080
-    //baseURL: 'http://localhost:8080'
+    baseURL: 'http://localhost:8080',
+    withCredentials:true
   },
 
   /*
