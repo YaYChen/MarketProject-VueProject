@@ -46,32 +46,51 @@ export default {
   methods: {
     inputListener: function() {
       var vm = this
-      vm.$axios
-        .get('/p/product-ByCode', {
-          params: {
-            code: vm.barcode
-          }
+      let token = vm.$store.state.user.user.token.token
+      console.log(token)
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
         })
-        .then(function(response) {
-          if (
-            response.data === null ||
-            response.data === undefined ||
-            response.data === ''
-          ) {
-            vm.$message({
-              message: vm.$t('message.productNotFound'),
-              type: 'warning'
-            })
-            vm.barcode = ''
-          } else {
-            vm.showProduct = true
-            vm.product = response.data
-            vm.barcode = ''
-          }
-        })
-        .catch(function(error) {
-          console.log(error)
-        })
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .get('/p/product-ByCode', {
+            headers: {
+              Authorization: token
+            },
+            params: {
+              code: vm.barcode
+            }
+          })
+          .then(function(response) {
+            if (
+              response.data === null ||
+              response.data === undefined ||
+              response.data === ''
+            ) {
+              vm.$message({
+                message: vm.$t('message.productNotFound'),
+                type: 'warning'
+              })
+              vm.barcode = ''
+            } else {
+              vm.showProduct = true
+              vm.product = response.data
+              vm.barcode = ''
+            }
+          })
+          .catch(function(error) {
+            if (error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            }
+          })
+      }
     }
   }
 }

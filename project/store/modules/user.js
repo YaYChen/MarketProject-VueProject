@@ -1,7 +1,7 @@
 const state = {
   user: {
     userId: '',
-    username: '',
+    userName: '',
     token: ''
   }
 }
@@ -31,7 +31,7 @@ const mutations = {
   deleteUser(state) {
     state.user = {
       userId: '',
-      username: '',
+      userName: '',
       token: ''
     }
   }

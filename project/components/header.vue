@@ -59,16 +59,16 @@
         </el-col>
         <el-col :span="3">
           <div 
-            v-if="user.username === ''" 
+            v-show="loginOut" 
             class="header_login">
             <a @click="signIn">Sign In</a>
           </div>
           <div 
-            v-else 
+            v-show="loginIn" 
             class="header_login">
             <el-dropdown @command="handleCommanduser">
               <span class="el-dropdown-link">
-                {{ user.username }}
+                {{ user.userName }}
                 <i class="el-icon-arrow-down el-icon--right"/>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -84,6 +84,8 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie'
+
 export default {
   props: {
     activeIndex: {
@@ -95,14 +97,22 @@ export default {
     return {
       user: {
         userId: '',
-        username: ''
-      }
+        userName: ''
+      },
+      loginIn: false,
+      loginOut: false
     }
   },
   created() {
     let vm = this
-    vm.user.userId = vm.$store.state.user.user.userId
-    vm.user.username = vm.$store.state.user.user.username
+    if (Cookies.get('user') !== undefined && Cookies.get('user') !== '') {
+      vm.loginIn = true
+      vm.$store.dispatch('user/addUser', JSON.parse(Cookies.get('user')))
+      vm.user.userId = vm.$store.state.user.user.userId
+      vm.user.userName = vm.$store.state.user.user.userName
+    } else {
+      vm.loginOut = true
+    }
   },
   methods: {
     handleSelect(key, keyPath) {
@@ -157,9 +167,12 @@ export default {
       let vm = this
       vm.user = {
         userId: '',
-        username: ''
+        userName: ''
       }
+      Cookies.remove('user')
       vm.$store.dispatch('user/deleteUser')
+      vm.loginIn = false
+      vm.loginOut = true
     },
     showDetial() {}
   }

@@ -15,8 +15,8 @@
               :rules="rules" >
               <el-form-item 
                 label="User Name" 
-                prop="username">
-                <el-input v-model="login_user.username"/>
+                prop="loginName">
+                <el-input v-model="login_user.loginName"/>
               </el-form-item>
               <el-form-item 
                 label="Password" 
@@ -53,7 +53,7 @@
 
 <script>
 import Footer from '@/components/footer.vue'
-
+import Cookies from 'js-cookie'
 export default {
   components: {
     'app-footer': Footer
@@ -61,11 +61,11 @@ export default {
   data: function() {
     return {
       login_user: {
-        username: '',
+        loginName: '',
         password: ''
       },
       rules: {
-        username: [
+        loginName: [
           { required: true, message: '请输入用户名称', trigger: 'blur' },
           { min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur' }
         ],
@@ -92,9 +92,10 @@ export default {
           } else {
             let user = {
               userId: data.userId,
-              username: data.username,
+              userName: data.userName,
               token: data.token
             }
+            Cookies.set('user', JSON.stringify(user))
             vm.$store.dispatch('user/addUser', user)
             vm.$router.back(-1)
           }

@@ -37,8 +37,7 @@ module.exports = {
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/VueI18n',
-    '@/plugins/route',
-    '@/plugins/axios'
+    '@/plugins/route'
   ],
 
   /*
@@ -56,7 +55,8 @@ module.exports = {
     //dev: http://localhost:8080
     //prod:http://101.132.123.27:8080
     baseURL: 'http://localhost:8080',
-    withCredentials:true
+    withCredentials: true,
+    timeout: 10000
   },
 
   /*
