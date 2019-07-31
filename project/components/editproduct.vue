@@ -50,37 +50,58 @@ export default {
   methods: {
     inputListener: function() {
       var vm = this
-      this.$axios
-        .get('/product-ByCode', {
-          params: {
-            code: vm.barcode
-          }
+      let token = vm.$store.state.user.user.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
         })
-        .then(function(response) {
-          if (response.data === '') {
-            // "",[]
-            vm.update = false
-            vm.product = {
-              id: 0,
-              code: vm.barcode,
-              name: '',
-              category: { id: 1, name: '烟草' },
-              specification: '',
-              productPicture: '',
-              purchasePrice: '',
-              price: ''
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .get('/p/product-ByCode', {
+            headers: {
+              Authorization: token
+            },
+            params: {
+              code: vm.barcode
             }
-            alert('The product is not exit,please add...')
-          } else {
-            vm.update = true
-            vm.product = response.data
-          }
-          vm.barcode = ''
-          vm.showProduct = true
-        })
-        .catch(function(error) {
-          console.log(error)
-        })
+          })
+          .then(function(response) {
+            if (response.data === '') {
+              vm.update = false
+              vm.product = {
+                id: 0,
+                code: vm.barcode,
+                name: '',
+                category: { id: 1, name: '烟草' },
+                specification: '',
+                productPicture: '',
+                purchasePrice: '',
+                price: ''
+              }
+              alert('The product is not exit,please add...')
+            } else {
+              vm.update = true
+              vm.product = response.data
+            }
+            vm.barcode = ''
+            vm.showProduct = true
+          })
+          .catch(function(error) {
+            if (error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            }
+            vm.$message({
+              message: error,
+              type: 'warning'
+            })
+          })
+      }
     },
     disableEditer: function() {
       var vm = this

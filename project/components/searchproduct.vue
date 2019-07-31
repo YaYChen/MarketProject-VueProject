@@ -47,7 +47,6 @@ export default {
     inputListener: function() {
       var vm = this
       let token = vm.$store.state.user.user.token.token
-      console.log(token)
       if (token === undefined || token === '') {
         vm.$message({
           message: 'No auth',
@@ -89,6 +88,10 @@ export default {
               })
               vm.$router.push({ name: 'login' })
             }
+            vm.$message({
+              message: error,
+              type: 'warning'
+            })
           })
       }
     }

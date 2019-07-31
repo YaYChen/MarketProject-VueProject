@@ -87,7 +87,7 @@ export default {
       selectCategories: [],
       selectValue: '',
       imageUrl: '',
-      imgUploadPath: utils.imgUploadPath,
+      imgUploadPath: '',
       rules: {
         name: [
           {
@@ -129,17 +129,45 @@ export default {
   },
   created: function() {
     let vm = this
-    vm.$axios
-      .get('/getCategories')
-      .then(response => {
-        vm.selectCategories = response.data
+    let token = vm.$store.state.user.user.token.token
+    if (token === undefined || token === '') {
+      vm.$message({
+        message: 'No auth',
+        type: 'warning'
       })
-      .catch(function(error) {
-        alert(error)
-      })
-    vm.orginalProduct = vm.product
-    vm.selectValue = vm.product.category.id
-    vm.imageUrl = utils.getImgFilePath(vm.product.productPicture)
+      vm.$router.push({ name: 'login' })
+    } else {
+      vm.$axios
+        .get('/p/getCategories', {
+          headers: {
+            Authorization: token
+          }
+        })
+        .then(response => {
+          vm.selectCategories = response.data
+        })
+        .catch(function(error) {
+          if (error.request.status === 401) {
+            vm.$message({
+              message: 'No auth',
+              type: 'warning'
+            })
+            vm.$router.push({ name: 'login' })
+          }
+          vm.$message({
+            message: error,
+            type: 'warning'
+          })
+        })
+      vm.orginalProduct = vm.product
+      vm.selectValue = vm.product.category.id
+      vm.imageUrl =
+        utils.getImgFilePath(vm.product.productPicture) +
+        '&userId=' +
+        vm.$store.state.user.user.userId
+      vm.imgUploadPath =
+        utils.imgUploadPath + '?userId=' + vm.$store.state.user.user.userId
+    }
   },
   methods: {
     submit: function() {
@@ -150,40 +178,83 @@ export default {
             alert('Please upload img...')
           } else {
             var postData = JSON.stringify(vm.product)
-            vm.$axios
-              .post('/update-product', postData, {
-                headers: {
-                  'Content-Type': 'application/json;charset=UTF-8'
-                }
+            let token = vm.$store.state.user.user.token.token
+            if (token === undefined || token === '') {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
               })
-              .then(response => {
-                alert(response.data.message)
-              })
-              .catch(function(error) {
-                alert(error)
-              })
+              vm.$router.push({ name: 'login' })
+            } else {
+              vm.$axios
+                .post('/p/update-product', postData, {
+                  headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    Authorization: token
+                  }
+                })
+                .then(response => {
+                  alert(response.data.message)
+                })
+                .catch(function(error) {
+                  if (error.request.status === 401) {
+                    vm.$message({
+                      message: 'No auth',
+                      type: 'warning'
+                    })
+                    vm.$router.push({ name: 'login' })
+                  }
+                  vm.$message({
+                    message: error,
+                    type: 'warning'
+                  })
+                })
+            }
           }
         } else {
           if (vm.product.productPicture === '') {
             alert('Please upload img...')
           } else {
             var postData = JSON.stringify(vm.product)
-            vm.$axios
-              .post('/insert-product', postData, {
-                headers: {
-                  'Content-Type': 'application/json;charset=UTF-8'
-                }
+            let token = vm.$store.state.user.user.token.token
+            if (token === undefined || token === '') {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
               })
-              .then(response => {
-                alert(response.data.message)
-              })
-              .catch(function(error) {
-                alert(error)
-              })
+              vm.$router.push({ name: 'login' })
+            } else {
+              vm.$axios
+                .post('/insert-product', postData, {
+                  headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    Authorization: token
+                  }
+                })
+                .then(response => {
+                  alert(response.data.message)
+                })
+                .catch(function(error) {
+                  if (error.request.status === 401) {
+                    vm.$message({
+                      message: 'No auth',
+                      type: 'warning'
+                    })
+                    vm.$router.push({ name: 'login' })
+                  }
+                  vm.$message({
+                    message: error,
+                    type: 'warning'
+                  })
+                })
+            }
           }
         }
       } catch (error) {
-        alert(error.message)
+        vm.$message({
+          message: error.message,
+          type: 'warning'
+        })
       }
     },
     hiddenForm: function() {
