@@ -41,7 +41,9 @@ export default {
   created() {},
   methods: {
     updateImg: function(filename) {
-      return utils.getImgFilePath(filename)
+      let vm = this
+      let userId = vm.$store.state.user.user.userId
+      return utils.getImgFilePath(filename + '&userId=' + userId)
     }
   }
 }

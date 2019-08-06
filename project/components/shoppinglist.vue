@@ -103,43 +103,67 @@ export default {
   },
   created() {
     let vm = this
-    vm.$axios
-      .get('/users')
-      .then(function(response) {
-        vm.userID = response.data[0].id
+    let userId = vm.$store.state.user.user.userId
+    if (userId === undefined || userId === '') {
+      vm.$message({
+        message: 'No auth',
+        type: 'warning'
       })
-      .catch(function(error) {
-        console.log(error)
-      })
+      vm.$router.push({ name: 'login' })
+    } else {
+      vm.userID = userId
+    }
   },
   methods: {
     inputListener: function() {
       var vm = this
-      vm.$axios
-        .get('/product-ByCode', {
-          params: {
-            code: vm.barcode
-          }
+      let token = vm.$store.state.user.user.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
         })
-        .then(function(response) {
-          let product = response.data
-          if (
-            response.data === null ||
-            response.data === undefined ||
-            response.data === ''
-          ) {
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .get('/p/product-ByCode', {
+            headers: {
+              Authorization: token
+            },
+            params: {
+              code: vm.barcode
+            }
+          })
+          .then(function(response) {
+            let product = response.data
+            if (
+              response.data === null ||
+              response.data === undefined ||
+              response.data === ''
+            ) {
+              vm.$message({
+                message: vm.$t('message.productNotFound'),
+                type: 'warning'
+              })
+            } else {
+              vm.$store.dispatch('cart/addProductToCart', product)
+            }
+            vm.barcode = ''
+          })
+          .catch(function(error) {
+            if (error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            }
             vm.$message({
-              message: vm.$t('message.productNotFound'),
+              message: error,
               type: 'warning'
             })
-          } else {
-            vm.$store.dispatch('cart/addProductToCart', product)
-          }
-          vm.barcode = ''
-        })
-        .catch(function(error) {
-          console.log(error)
-        })
+          })
+      }
     },
     dialogConfirm: function() {
       var vm = this
@@ -183,23 +207,43 @@ export default {
     saveOrder() {
       let vm = this
       let postData = JSON.stringify(vm.order)
-      vm.$axios
-        .post('/create-order', postData, {
-          headers: {
-            'Content-Type': 'application/json;charset=UTF-8'
-          }
+      let token = vm.$store.state.user.user.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
         })
-        .then(response => {
-          vm.$store.dispatch('cart/clearCart')
-          vm.productList = vm.$store.state.cart.items
-          vm.$message({
-            message: vm.$t('message.settlementSuccess'),
-            type: 'success'
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .post('/p/create-order', postData, {
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8',
+              Authorization: token
+            }
           })
-        })
-        .catch(function(error) {
-          vm.$message.error(error)
-        })
+          .then(response => {
+            vm.$store.dispatch('cart/clearCart')
+            vm.productList = vm.$store.state.cart.items
+            vm.$message({
+              message: vm.$t('message.settlementSuccess'),
+              type: 'success'
+            })
+          })
+          .catch(function(error) {
+            if (error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            }
+            vm.$message({
+              message: error,
+              type: 'warning'
+            })
+          })
+      }
     }
   }
 }

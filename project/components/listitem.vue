@@ -65,7 +65,10 @@ export default {
   },
   created() {
     let vm = this
-    vm.imgSrc = utils.getImgFilePath(vm.item.product.productPicture)
+    let userId = vm.$store.state.user.user.userId
+    vm.imgSrc = utils.getImgFilePath(
+      vm.item.product.productPicture + '&userId=' + userId
+    )
   },
   methods: {
     addQuantity() {

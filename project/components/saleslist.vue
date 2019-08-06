@@ -176,25 +176,48 @@ export default {
     getAllList() {
       let vm = this
       vm.list = []
-      vm.$axios
-        .get('/get-all-order')
-        .then(function(response) {
-          vm.list = response.data
-          vm.list.forEach(element => {
-            element.isActive = false
-            element.createTime = utils.getDateStringForShow(
-              new Date(element.createTime)
-            )
-            element.orderItems.forEach(subitem => {
-              subitem.product.productPicture = utils.getImgFilePath(
-                subitem.product.productPicture
+      let token = vm.$store.state.user.user.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
+        })
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .get('/get-all-order', {
+            headers: {
+              Authorization: token
+            }
+          })
+          .then(function(response) {
+            vm.list = response.data
+            vm.list.forEach(element => {
+              element.isActive = false
+              element.createTime = utils.getDateStringForShow(
+                new Date(element.createTime)
               )
+              element.orderItems.forEach(subitem => {
+                subitem.product.productPicture = utils.getImgFilePath(
+                  subitem.product.productPicture
+                )
+              })
             })
           })
-        })
-        .catch(function(error) {
-          console.log(error)
-        })
+          .catch(function(error) {
+            if (error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            }
+            vm.$message({
+              message: error,
+              type: 'warning'
+            })
+          })
+      }
     },
     getListItemProducts(id) {
       let vm = this
