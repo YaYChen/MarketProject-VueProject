@@ -215,6 +215,7 @@ export default {
           if (vm.product.productPicture === '') {
             alert('Please upload img...')
           } else {
+            vm.product.category.id = vm.selectValue
             var postData = JSON.stringify(vm.product)
             let token = vm.$store.state.user.user.token.token
             if (token === undefined || token === '') {
@@ -225,7 +226,7 @@ export default {
               vm.$router.push({ name: 'login' })
             } else {
               vm.$axios
-                .post('/insert-product', postData, {
+                .post('/p/insert-product', postData, {
                   headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     Authorization: token

@@ -74,7 +74,7 @@ export default {
                 id: 0,
                 code: vm.barcode,
                 name: '',
-                category: { id: 1, name: '烟草' },
+                category: {},
                 specification: '',
                 productPicture: '',
                 purchasePrice: '',
