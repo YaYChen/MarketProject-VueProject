@@ -16,7 +16,9 @@
           </div>
         </el-col>
         <el-col :span="6">
-          <el-button type="primary">{{ $t('button.inquire') }}</el-button>
+          <el-button 
+            type="primary" 
+            @click="getListByDate()">{{ $t('button.inquire') }}</el-button>
         </el-col>
       </el-row>
     </div>
@@ -176,6 +178,7 @@ export default {
     getAllList() {
       let vm = this
       vm.list = []
+      let userId = vm.$store.state.user.user.userId
       let token = vm.$store.state.user.user.token.token
       if (token === undefined || token === '') {
         vm.$message({
@@ -185,7 +188,7 @@ export default {
         vm.$router.push({ name: 'login' })
       } else {
         vm.$axios
-          .get('/get-all-order', {
+          .get('/p/get-all-order', {
             headers: {
               Authorization: token
             }
@@ -199,7 +202,7 @@ export default {
               )
               element.orderItems.forEach(subitem => {
                 subitem.product.productPicture = utils.getImgFilePath(
-                  subitem.product.productPicture
+                  subitem.product.productPicture + '&userId=' + userId
                 )
               })
             })
@@ -242,6 +245,44 @@ export default {
         .catch(function(error) {
           console.log(error)
         })
+    },
+    getListByDate() {
+      let vm = this
+      console.log(vm.daterange)
+      if (utils.isEmpty(vm.daterange)) {
+        vm.$message({
+          message: 'Please pick date...',
+          type: 'warning'
+        })
+      } else {
+        let dateParam = {
+          start: utils.getDateString(vm.daterange[0]),
+          end: utils.getDateString(vm.daterange[1])
+        }
+        let token = vm.$store.state.user.user.token.token
+        if (token === undefined || token === '') {
+          vm.$message({
+            message: 'No auth',
+            type: 'warning'
+          })
+          vm.$router.push({ name: 'login' })
+        } else {
+          let postData = JSON.stringify(dateParam)
+          vm.$axios
+            .post('/p/search-order-by-date', postData, {
+              headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                Authorization: token
+              }
+            })
+            .then(function(response) {
+              vm.boardlist = response.data
+            })
+            .catch(function(error) {
+              console.log(error)
+            })
+        }
+      }
     }
   }
 }

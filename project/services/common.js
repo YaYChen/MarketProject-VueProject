@@ -44,6 +44,19 @@ const utils = {
     dateString = dateString + date.getMinutes() + ':'
     dateString = dateString + date.getSeconds()
     return dateString
+  },
+  isEmpty(value) {
+    if (
+      value == null ||
+      value == '' ||
+      value == 'undefined' ||
+      value == undefined ||
+      value == 'null'
+    ) {
+      return true
+    } else {
+      return false
+    }
   }
 }
 
