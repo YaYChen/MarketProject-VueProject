@@ -65,7 +65,7 @@
 
 <script>
 import utils from '@/services/common.js'
-
+import Cookies from 'js-cookie'
 export default {
   props: {
     product: {
@@ -127,9 +127,9 @@ export default {
       }
     }
   },
-  created: function() {
+  created() {
     let vm = this
-    let token = vm.$store.state.user.user.token.token
+    let token = vm.$store.state.user.userInfo.token.token
     if (token === undefined || token === '') {
       vm.$message({
         message: 'No auth',
@@ -164,9 +164,9 @@ export default {
       vm.imageUrl =
         utils.getImgFilePath(vm.product.productPicture) +
         '&userId=' +
-        vm.$store.state.user.user.userId
+        vm.$store.state.user.userInfo.userId
       vm.imgUploadPath =
-        utils.imgUploadPath + '?userId=' + vm.$store.state.user.user.userId
+        utils.imgUploadPath + '?userId=' + vm.$store.state.user.userInfo.userId
     }
   },
   methods: {
@@ -178,7 +178,7 @@ export default {
             alert('Please upload img...')
           } else {
             var postData = JSON.stringify(vm.product)
-            let token = vm.$store.state.user.user.token.token
+            let token = vm.$store.state.user.userInfo.token.token
             if (token === undefined || token === '') {
               vm.$message({
                 message: 'No auth',
@@ -217,7 +217,7 @@ export default {
           } else {
             vm.product.category.id = vm.selectValue
             var postData = JSON.stringify(vm.product)
-            let token = vm.$store.state.user.user.token.token
+            let token = vm.$store.state.user.userInfo.token.token
             if (token === undefined || token === '') {
               vm.$message({
                 message: 'No auth',

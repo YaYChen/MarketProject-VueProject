@@ -50,7 +50,7 @@
 
 <script>
 import utils from '@/services/common.js'
-
+import Cookies from 'js-cookie'
 export default {
   props: {
     item: {
@@ -65,7 +65,7 @@ export default {
   },
   created() {
     let vm = this
-    let userId = vm.$store.state.user.user.userId
+    let userId = vm.$store.state.user.userInfo.userId
     vm.imgSrc = utils.getImgFilePath(
       vm.item.product.productPicture + '&userId=' + userId
     )

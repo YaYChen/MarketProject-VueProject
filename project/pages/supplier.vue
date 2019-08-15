@@ -10,7 +10,6 @@
 import Header from '@/components/header.vue'
 import Footer from '@/components/footer.vue'
 import SupplierList from '@/components/supplierlist.vue'
-
 export default {
   components: {
     'app-header': Header,
@@ -22,6 +21,7 @@ export default {
       activeIndex: '3-4'
     }
   },
+  created() {},
   methods: {}
 }
 </script>

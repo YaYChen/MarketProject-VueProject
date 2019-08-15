@@ -100,18 +100,22 @@ export default {
         userName: ''
       },
       loginIn: false,
-      loginOut: false
+      loginOut: true
     }
   },
   created() {
     let vm = this
-    if (Cookies.get('user') !== undefined && Cookies.get('user') !== '') {
+    let user = JSON.parse(Cookies.get('user') || null)
+    if (user !== null) {
+      vm.$store.dispatch('user/addUser', user)
+      vm.user.userId = vm.$store.state.user.userInfo.userId
+      vm.user.userName = vm.$store.state.user.userInfo.userName
       vm.loginIn = true
-      vm.$store.dispatch('user/addUser', JSON.parse(Cookies.get('user')))
-      vm.user.userId = vm.$store.state.user.user.userId
-      vm.user.userName = vm.$store.state.user.user.userName
+      vm.loginOut = false
     } else {
+      vm.loginIn = false
       vm.loginOut = true
+      vm.$router.push({ name: 'login' })
     }
   },
   methods: {

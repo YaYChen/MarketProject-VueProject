@@ -27,7 +27,7 @@
 
 <script>
 import utils from '@/services/common.js'
-
+import Cookies from 'js-cookie'
 export default {
   props: {
     product: {
@@ -38,11 +38,19 @@ export default {
   data: function() {
     return {}
   },
-  created() {},
+  created() {
+    let vm = this
+    let user = JSON.parse(Cookies.get('user') || null)
+    if (user !== null) {
+      vm.$store.dispatch('user/addUser', user)
+    } else {
+      vm.$router.push({ name: 'login' })
+    }
+  },
   methods: {
     updateImg: function(filename) {
       let vm = this
-      let userId = vm.$store.state.user.user.userId
+      let userId = vm.$store.state.user.userInfo.userId
       return utils.getImgFilePath(filename + '&userId=' + userId)
     }
   }

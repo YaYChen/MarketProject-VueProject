@@ -150,7 +150,7 @@
 
 <script>
 import utils from '@/services/common.js'
-
+import Cookies from 'js-cookie'
 export default {
   data() {
     return {
@@ -164,7 +164,13 @@ export default {
   },
   created() {
     let vm = this
-    vm.getAllList()
+    let user = JSON.parse(Cookies.get('user') || null)
+    if (user !== null) {
+      vm.$store.dispatch('user/addUser', user)
+      vm.getAllList()
+    } else {
+      vm.$router.push({ name: 'login' })
+    }
   },
   methods: {
     tabClick(tab, event) {
@@ -178,8 +184,8 @@ export default {
     getAllList() {
       let vm = this
       vm.list = []
-      let userId = vm.$store.state.user.user.userId
-      let token = vm.$store.state.user.user.token.token
+      let userId = vm.$store.state.user.userInfo.userId
+      let token = vm.$store.state.user.userInfo.token.token
       if (token === undefined || token === '') {
         vm.$message({
           message: 'No auth',
@@ -259,7 +265,7 @@ export default {
           start: utils.getDateString(vm.daterange[0]),
           end: utils.getDateString(vm.daterange[1])
         }
-        let token = vm.$store.state.user.user.token.token
+        let token = vm.$store.state.user.userInfo.token.token
         if (token === undefined || token === '') {
           vm.$message({
             message: 'No auth',

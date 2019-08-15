@@ -30,7 +30,7 @@
 
 <script>
 import Product from '@/components/product.vue'
-
+import Cookies from 'js-cookie'
 export default {
   components: {
     'product-component': Product
@@ -42,11 +42,19 @@ export default {
       barcode: ''
     }
   },
-  created: function() {},
+  created: function() {
+    let vm = this
+    let user = JSON.parse(Cookies.get('user') || null)
+    if (user !== null) {
+      vm.$store.dispatch('user/addUser', user)
+    } else {
+      vm.$router.push({ name: 'login' })
+    }
+  },
   methods: {
     inputListener: function() {
       var vm = this
-      let token = vm.$store.state.user.user.token.token
+      let token = vm.$store.state.user.userInfo.token.token
       if (token === undefined || token === '') {
         vm.$message({
           message: 'No auth',

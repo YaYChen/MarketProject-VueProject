@@ -95,7 +95,7 @@ export default {
               userName: data.userName,
               token: data.token
             }
-            Cookies.set('user', JSON.stringify(user))
+            Cookies.set('user', user)
             vm.$store.dispatch('user/addUser', user)
             vm.$router.back(-1)
           }

@@ -2,7 +2,10 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    node: true
+    node: true,
+    es6: true,
+    'shared-node-browser': true,
+    commonjs: true
   },
   parserOptions: {
     parser: 'babel-eslint'
@@ -18,12 +21,7 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    // 风格问题
-    //
-    // @fixable 限制自定义组件的属性风格
-    // @off 没必要限制
+    'no-console': 'off',
     'vue/attribute-hyphenation': 'off'
   }
 }

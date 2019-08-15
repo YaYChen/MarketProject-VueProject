@@ -87,7 +87,7 @@
 <script>
 import ListItem from '@/components/listitem.vue'
 import utils from '@/services/common.js'
-
+import Cookies from 'js-cookie'
 export default {
   components: {
     'listitem-component': ListItem
@@ -103,21 +103,18 @@ export default {
   },
   created() {
     let vm = this
-    let userId = vm.$store.state.user.user.userId
-    if (userId === undefined || userId === '') {
-      vm.$message({
-        message: 'No auth',
-        type: 'warning'
-      })
-      vm.$router.push({ name: 'login' })
+    let user = JSON.parse(Cookies.get('user') || null)
+    if (user !== null) {
+      vm.$store.dispatch('user/addUser', user)
+      vm.userID = vm.$store.state.user.userInfo.userId
     } else {
-      vm.userID = userId
+      vm.$router.push({ name: 'login' })
     }
   },
   methods: {
     inputListener: function() {
       var vm = this
-      let token = vm.$store.state.user.user.token.token
+      let token = vm.$store.state.user.userInfo.token.token
       if (token === undefined || token === '') {
         vm.$message({
           message: 'No auth',
@@ -181,7 +178,7 @@ export default {
       vm.$store.dispatch('cart/getTotalNumber')
       let date = new Date()
       vm.order = {
-        serial: utils.getDateString(date),
+        serial: vm.userID + utils.getDateString(date),
         createTime: '',
         createUser: { id: vm.userID },
         status: 'Done',
@@ -207,7 +204,7 @@ export default {
     saveOrder() {
       let vm = this
       let postData = JSON.stringify(vm.order)
-      let token = vm.$store.state.user.user.token.token
+      let token = vm.$store.state.user.userInfo.token.token
       if (token === undefined || token === '') {
         vm.$message({
           message: 'No auth',

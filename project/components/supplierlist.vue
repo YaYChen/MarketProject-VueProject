@@ -122,7 +122,7 @@
 
 <script>
 import utils from '@/services/common.js'
-
+import Cookies from 'js-cookie'
 export default {
   data() {
     return {
@@ -159,7 +159,13 @@ export default {
   },
   created() {
     let vm = this
-    vm.loadSuppliers()
+    let user = JSON.parse(Cookies.get('user') || null)
+    if (user !== null) {
+      vm.$store.dispatch('user/addUser', user)
+      vm.loadSuppliers()
+    } else {
+      vm.$router.push({ name: 'login' })
+    }
   },
   methods: {
     loadSuppliers() {

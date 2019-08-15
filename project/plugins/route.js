@@ -1,16 +1,18 @@
+import Cookies from 'js-cookie'
 export default ({ app, store }) => {
   app.router.beforeEach((to, from, next) => {
-    if (store.state.user.user.token !== undefined) {
-      const token = store.state.user.user.token
-      if (token == '' && to.path !== '/login' && to.path !== '/') {
-        next('/login')
-      } else if (to.path == '/login' || to.path == '/') {
+    let user = JSON.parse(Cookies.get('user') || null)
+    if (user !== null) {
+      store.dispatch('user/addUser', user)
+    }
+    if (store.state.user.userInfo !== undefined) {
+      next()
+    } else {
+      if (to.path == '/login') {
         next()
       } else {
-        next()
+        next('/login')
       }
-    } else {
-      next('/')
     }
   })
 }

@@ -1,17 +1,9 @@
 const state = {
-  user: {
-    userId: '',
-    userName: '',
-    token: ''
-  }
+  userInfo: null
 }
 
 // getters
-const getters = {
-  cartProducts: (state, getters) => {
-    return state.user
-  }
-}
+const getters = {}
 
 // actions
 const actions = {
@@ -26,14 +18,10 @@ const actions = {
 // mutations
 const mutations = {
   addUser(state, user) {
-    state.user = user
+    state.userInfo = user
   },
   deleteUser(state) {
-    state.user = {
-      userId: '',
-      userName: '',
-      token: ''
-    }
+    state.userInfo = null
   }
 }
 

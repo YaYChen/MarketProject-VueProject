@@ -10,7 +10,6 @@
 import Header from '@/components/header.vue'
 import Footer from '@/components/footer.vue'
 import SearchProduct from '@/components/searchproduct.vue'
-
 export default {
   components: {
     'search-product-component': SearchProduct,

@@ -10,7 +10,6 @@
 import Header from '@/components/header.vue'
 import Footer from '@/components/footer.vue'
 import ShoppingList from '@/components/shoppinglist.vue'
-
 export default {
   components: {
     'app-header': Header,
