@@ -24,9 +24,7 @@
                 index="2" 
               >{{ $t('navbar.shoppingList') }}</el-menu-item>
               <el-submenu index="3">
-                <p 
-                  slot="title" 
-                >{{ $t('navbar.manager') }}</p>
+                <template slot="title">{{ $t('navbar.manager') }}</template>
                 <el-menu-item
                   index="3-1"
                 >{{ $t('navbar.managers.product') }}</el-menu-item>

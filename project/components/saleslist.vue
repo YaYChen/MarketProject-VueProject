@@ -212,19 +212,23 @@ export default {
                 )
               })
             })
+            if (vm.list.length > 1) {
+              vm.getListItemProducts(vm.list[0].id)
+            }
           })
           .catch(function(error) {
-            if (error.request.status === 401) {
+            if (error.request && error.request.status === 401) {
               vm.$message({
                 message: 'No auth',
                 type: 'warning'
               })
               vm.$router.push({ name: 'login' })
+            } else {
+              vm.$message({
+                message: error,
+                type: 'warning'
+              })
             }
-            vm.$message({
-              message: error,
-              type: 'warning'
-            })
           })
       }
     },
@@ -243,18 +247,41 @@ export default {
     },
     getBoardList() {
       let vm = this
-      vm.$axios
-        .get('/getWholeSalesVolume')
-        .then(function(response) {
-          vm.boardlist = response.data
+      let token = vm.$store.state.user.userInfo.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
         })
-        .catch(function(error) {
-          console.log(error)
-        })
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .get('/p/getWholeSalesVolume', {
+            headers: {
+              Authorization: token
+            }
+          })
+          .then(function(response) {
+            vm.boardlist = response.data
+          })
+          .catch(function(error) {
+            if (error.request && error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            } else {
+              vm.$message({
+                message: error,
+                type: 'warning'
+              })
+            }
+          })
+      }
     },
     getListByDate() {
       let vm = this
-      console.log(vm.daterange)
       if (utils.isEmpty(vm.daterange)) {
         vm.$message({
           message: 'Please pick date...',
@@ -262,8 +289,8 @@ export default {
         })
       } else {
         let dateParam = {
-          start: utils.getDateString(vm.daterange[0]),
-          end: utils.getDateString(vm.daterange[1])
+          start: utils.getDateTimeString(vm.daterange[0]),
+          end: utils.getDateTimeString(vm.daterange[1])
         }
         let token = vm.$store.state.user.userInfo.token.token
         if (token === undefined || token === '') {
@@ -273,6 +300,7 @@ export default {
           })
           vm.$router.push({ name: 'login' })
         } else {
+          let userId = vm.$store.state.user.userInfo.userId
           let postData = JSON.stringify(dateParam)
           vm.$axios
             .post('/p/search-order-by-date', postData, {
@@ -282,10 +310,35 @@ export default {
               }
             })
             .then(function(response) {
-              vm.boardlist = response.data
+              vm.list = response.data
+              vm.list.forEach(element => {
+                element.isActive = false
+                element.createTime = utils.getDateStringForShow(
+                  new Date(element.createTime)
+                )
+                element.orderItems.forEach(subitem => {
+                  subitem.product.productPicture = utils.getImgFilePath(
+                    subitem.product.productPicture + '&userId=' + userId
+                  )
+                })
+              })
+              if (vm.list.length > 1) {
+                vm.getListItemProducts(vm.list[0].id)
+              }
             })
             .catch(function(error) {
-              console.log(error)
+              if (error.request && error.request.status === 401) {
+                vm.$message({
+                  message: 'No auth',
+                  type: 'warning'
+                })
+                vm.$router.push({ name: 'login' })
+              } else {
+                vm.$message({
+                  message: error,
+                  type: 'warning'
+                })
+              }
             })
         }
       }

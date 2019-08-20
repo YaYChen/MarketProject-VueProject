@@ -130,7 +130,7 @@ export default {
       onEditSupplier: {},
       dialogVisible: false,
       dialogTitle: '添加',
-      imgUploadPath: utils.imgUploadPath,
+      imgUploadPath: '',
       imageUrl: '',
       rules: {
         name: [
@@ -162,6 +162,8 @@ export default {
     let user = JSON.parse(Cookies.get('user') || null)
     if (user !== null) {
       vm.$store.dispatch('user/addUser', user)
+      vm.imgUploadPath =
+        utils.imgUploadPath + '?userId=' + vm.$store.state.user.userInfo.userId
       vm.loadSuppliers()
     } else {
       vm.$router.push({ name: 'login' })
@@ -171,24 +173,52 @@ export default {
     loadSuppliers() {
       let vm = this
       vm.supplierList = []
-      vm.$axios
-        .get('/getAllSupplier')
-        .then(function(response) {
-          let list = response.data
-          list.forEach(element => {
-            let supplier = {
-              id: element.id,
-              name: element.name,
-              brand: element.brand,
-              phone: element.phone,
-              picture: utils.getImgFilePath(element.picture)
+      let userId = vm.$store.state.user.userInfo.userId
+      let token = vm.$store.state.user.userInfo.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
+        })
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .get('/p/getAllSupplier', {
+            headers: {
+              Authorization: token
             }
-            vm.supplierList.push(supplier)
           })
-        })
-        .catch(function(error) {
-          console.log(error)
-        })
+          .then(function(response) {
+            let list = response.data
+            list.forEach(element => {
+              let supplier = {
+                id: element.id,
+                name: element.name,
+                brand: element.brand,
+                phone: element.phone,
+                picture:
+                  utils.getImgFilePath(element.picture) +
+                  '&userId=' +
+                  vm.$store.state.user.userInfo.userId
+              }
+              vm.supplierList.push(supplier)
+            })
+          })
+          .catch(function(error) {
+            if (error.request && error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            } else {
+              vm.$message({
+                message: error,
+                type: 'warning'
+              })
+            }
+          })
+      }
     },
     handleAvatarSuccess: function(response, file) {
       let vm = this
@@ -216,23 +246,46 @@ export default {
     },
     deleteSupplier(id) {
       let vm = this
-      vm.$axios
-        .delete('/deleteSupplier', {
-          params: {
-            id: id
-          }
+      let token = vm.$store.state.user.userInfo.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
         })
-        .then(function(response) {
-          if (response.data.message === 'Success!') {
-            vm.loadSuppliers()
-            alert(response.data.message)
-          } else {
-            alert(response.data.message)
-          }
-        })
-        .catch(function(error) {
-          console.log(error)
-        })
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .delete('/p/deleteSupplier', {
+            params: {
+              id: id
+            },
+            headers: {
+              Authorization: token
+            }
+          })
+          .then(function(response) {
+            if (response.data.message === 'Success!') {
+              vm.loadSuppliers()
+              alert(response.data.message)
+            } else {
+              alert(response.data.message)
+            }
+          })
+          .catch(function(error) {
+            if (error.request && error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            } else {
+              vm.$message({
+                message: error,
+                type: 'warning'
+              })
+            }
+          })
+      }
     },
     editSupplier(id) {
       let vm = this
@@ -255,42 +308,84 @@ export default {
       let vm = this
       if (vm.onEditSupplier.id != null && vm.onEditSupplier.id != '') {
         var postData = JSON.stringify(vm.onEditSupplier)
-        vm.$axios
-          .post('/updateSupplier', postData, {
-            headers: {
-              'Content-Type': 'application/json;charset=UTF-8'
-            }
+        let token = vm.$store.state.user.userInfo.token.token
+        if (token === undefined || token === '') {
+          vm.$message({
+            message: 'No auth',
+            type: 'warning'
           })
-          .then(response => {
-            if (response.data.message === 'Success!') {
-              vm.loadSuppliers()
-              alert(response.data.message)
-            } else {
-              alert(response.data.message)
-            }
-          })
-          .catch(function(error) {
-            alert(error)
-          })
+          vm.$router.push({ name: 'login' })
+        } else {
+          vm.$axios
+            .post('/p/updateSupplier', postData, {
+              headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                Authorization: token
+              }
+            })
+            .then(response => {
+              if (response.data.message === 'Success!') {
+                vm.loadSuppliers()
+                alert(response.data.message)
+              } else {
+                alert(response.data.message)
+              }
+            })
+            .catch(function(error) {
+              if (error.request && error.request.status === 401) {
+                vm.$message({
+                  message: 'No auth',
+                  type: 'warning'
+                })
+                vm.$router.push({ name: 'login' })
+              } else {
+                vm.$message({
+                  message: error,
+                  type: 'warning'
+                })
+              }
+            })
+        }
       } else {
         var postData = JSON.stringify(vm.onEditSupplier)
-        vm.$axios
-          .post('/insertSupplier', postData, {
-            headers: {
-              'Content-Type': 'application/json;charset=UTF-8'
-            }
+        let token = vm.$store.state.user.userInfo.token.token
+        if (token === undefined || token === '') {
+          vm.$message({
+            message: 'No auth',
+            type: 'warning'
           })
-          .then(response => {
-            if (response.data.message === 'Success!') {
-              vm.loadSuppliers()
-              alert(response.data.message)
-            } else {
-              alert(response.data.message)
-            }
-          })
-          .catch(function(error) {
-            alert(error)
-          })
+          vm.$router.push({ name: 'login' })
+        } else {
+          vm.$axios
+            .post('/p/insertSupplier', postData, {
+              headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                Authorization: token
+              }
+            })
+            .then(response => {
+              if (response.data.message === 'Success!') {
+                vm.loadSuppliers()
+                alert(response.data.message)
+              } else {
+                alert(response.data.message)
+              }
+            })
+            .catch(function(error) {
+              if (error.request && error.request.status === 401) {
+                vm.$message({
+                  message: 'No auth',
+                  type: 'warning'
+                })
+                vm.$router.push({ name: 'login' })
+              } else {
+                vm.$message({
+                  message: error,
+                  type: 'warning'
+                })
+              }
+            })
+        }
       }
       vm.dialogVisible = false
     },

@@ -24,7 +24,7 @@ const utils = {
   getDateString(date) {
     let dateString = ''
     dateString = dateString + date.getFullYear()
-    dateString = dateString + date.getMonth()
+    dateString = dateString + (date.getMonth() + 1)
     dateString = dateString + date.getDate()
     dateString = dateString + date.getHours()
     dateString = dateString + date.getMinutes()
@@ -38,11 +38,18 @@ const utils = {
   getDateStringForShow(date) {
     let dateString = ''
     dateString = dateString + date.getFullYear() + '-'
-    dateString = dateString + date.getMonth() + '-'
+    dateString = dateString + (date.getMonth() + 1) + '-'
     dateString = dateString + date.getDate() + ' '
     dateString = dateString + date.getHours() + ':'
     dateString = dateString + date.getMinutes() + ':'
     dateString = dateString + date.getSeconds()
+    return dateString
+  },
+  getDateTimeString(date) {
+    let dateString = ''
+    dateString = dateString + date.getFullYear() + '-'
+    dateString = dateString + (date.getMonth() + 1) + '-'
+    dateString = dateString + date.getDate()
     return dateString
   },
   isEmpty(value) {
