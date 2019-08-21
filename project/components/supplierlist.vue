@@ -40,7 +40,7 @@
               <div>
                 <div class="detial_img_div">
                   <img
-                    :src="item.picture"
+                    :src="getImageUrl(item.picture)"
                     class="img_picture">
                 </div>
               </div>
@@ -196,10 +196,7 @@ export default {
                 name: element.name,
                 brand: element.brand,
                 phone: element.phone,
-                picture:
-                  utils.getImgFilePath(element.picture) +
-                  '&userId=' +
-                  vm.$store.state.user.userInfo.userId
+                picture: element.picture
               }
               vm.supplierList.push(supplier)
             })
@@ -219,6 +216,14 @@ export default {
             }
           })
       }
+    },
+    getImageUrl(pictureName) {
+      let vm = this
+      return (
+        utils.getImgFilePath(pictureName) +
+        '&userId=' +
+        vm.$store.state.user.userInfo.userId
+      )
     },
     handleAvatarSuccess: function(response, file) {
       let vm = this
@@ -301,7 +306,7 @@ export default {
           }
         }
       })
-      vm.imageUrl = vm.onEditSupplier.picture
+      vm.imageUrl = vm.getImageUrl(vm.onEditSupplier.picture)
       vm.dialogVisible = true
     },
     dialogCommit() {
