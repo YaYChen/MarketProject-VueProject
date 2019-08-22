@@ -247,7 +247,11 @@ export default {
       alert('Upload img success!')
     },
     handleAvatarFaile: function(err, file, fileList) {
-      console.log('err: ' + err)
+      let vm = this
+      vm.$message({
+        message: 'err: ' + err,
+        type: 'warning'
+      })
     },
     deleteSupplier(id) {
       let vm = this
@@ -430,6 +434,7 @@ export default {
   margin: 5px;
   border: 1px solid lightgray;
   border-radius: 5px;
+  padding-bottom: 5px;
 }
 .card_content_div:hover {
   box-shadow: 2px 2px 10px grey;
@@ -453,10 +458,12 @@ export default {
 .detial_img_div {
   margin: 10px auto;
   height: 200px;
-  width: 180px;
+  width: 100%;
+  line-height: 200px;
+  text-align: center;
 }
 .img_picture {
-  width: 100%;
+  width: auto;
   height: 100%;
 }
 .card_operate_div {
@@ -477,7 +484,7 @@ export default {
   height: auto;
 }
 .upload_img {
-  width: 180px;
+  width: auto;
   height: 200px;
 }
 </style>
