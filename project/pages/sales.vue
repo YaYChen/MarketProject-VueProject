@@ -1,8 +1,12 @@
 <template>
   <div class="layout_main">
-    <app-header :activeIndex="activeIndex"/>
-    <sales-list/>
-    <app-footer/>
+    <app-header
+      :activeIndex="activeIndex"
+      class="layout_header"/>
+    <div class="layout_content">
+      <sales-list/>
+      <app-footer/>
+    </div>
   </div>
 </template>
 
@@ -31,5 +35,14 @@ export default {
   width: 100%;
   margin: 0 auto;
   height: 100%;
+}
+.layout_header {
+  position: fixed;
+  top: 0;
+  background-color: white;
+  z-index: 9;
+}
+.layout_content {
+  margin-top: 100px;
 }
 </style>

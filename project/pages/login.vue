@@ -1,5 +1,6 @@
 <template>
   <div class="layout_main">
+    <div class="top_line_div"/>
     <div class="layout_center">
       <div class="login_logo_continer">
         <div class="login_logo">
@@ -33,7 +34,9 @@
                   @click="loginIn">Sign In</el-button>
               </el-form-item>
               <el-form-item>
-                <div class="SignUp_tips">
+                <div 
+                  class="SignUp_tips"
+                  @click="showSingUpDialog">
                   ——Don't have an account?——
                 </div>
               </el-form-item>
@@ -48,6 +51,54 @@
       </div>
     </div>
     <app-footer/>
+    <el-dialog
+      :visible.sync="singUpDialogVisible"
+      title="注册"
+      width="30%">
+      <el-form 
+        :model="singUp_user" 
+        :rules="rules_singUp" >
+        <el-form-item 
+          label="Login Name" 
+          prop="loginName">
+          <el-input v-model="singUp_user.loginName"/>
+        </el-form-item>
+        <el-form-item 
+          label="User Name" 
+          prop="userName">
+          <el-input v-model="singUp_user.userName"/>
+        </el-form-item>
+        <el-form-item 
+          label="Password" 
+          prop="password">
+          <el-input
+            v-model="singUp_user.password"
+            type="password"/>
+        </el-form-item>
+        <el-form-item 
+          label="Repeat Password" 
+          prop="password_repeat">
+          <el-input
+            v-model="singUp_user.password_repeat"
+            type="password"/>
+        </el-form-item>
+        <el-form-item 
+          label="User Mobile" 
+          prop="user_mobile">
+          <el-input
+            v-model="singUp_user.user_mobile"/>
+        </el-form-item>              
+      </el-form>
+      <span 
+        slot="footer" 
+        class="dialog-footer">
+        <el-button 
+          @click="singUpDialogVisible = false">取 消</el-button>
+        <el-button 
+          type="primary" 
+          @click="singUp">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -71,6 +122,35 @@ export default {
         ],
         password: [
           { required: true, message: '请输入登陆密码', trigger: 'blur' }
+        ]
+      },
+      singUpDialogVisible: false,
+      singUp_user: {
+        loginName: '',
+        userName: '',
+        password: '',
+        password_repeat: '',
+        user_mobile: ''
+      },
+      rules_singUp: {
+        loginName: [
+          { required: true, message: '请输入用户登陆名', trigger: 'blur' },
+          { min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur' }
+        ],
+        userName: [
+          { required: true, message: '请输入用户名称', trigger: 'blur' },
+          { min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入登陆密码', trigger: 'blur' },
+          { min: 8, message: '长度大于 8 个字符', trigger: 'blur' }
+        ],
+        password_repeat: [
+          { required: true, message: '请输入登陆密码', trigger: 'blur' },
+          { min: 8, message: '长度大于 8 个字符', trigger: 'blur' }
+        ],
+        user_mobile: [
+          { required: true, message: '请输入用户手机号', trigger: 'blur' }
         ]
       }
     }
@@ -103,6 +183,47 @@ export default {
         .catch(function(error) {
           console.log(error)
         })
+    },
+    singUp() {
+      let vm = this
+      if (vm.singUp_user.password !== vm.singUp_user.password_repeat) {
+        vm.$message({
+          message: 'Please re-enter your password...',
+          type: 'warning'
+        })
+        return
+      }
+      let postData = JSON.stringify(vm.singUp_user)
+      vm.$axios
+        .post('/sign-up', postData, {
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+          }
+        })
+        .then(response => {
+          if (response.data.message === 'Success!') {
+            alert(response.data.message)
+          } else {
+            alert(response.data.message)
+          }
+        })
+        .catch(function(error) {
+          vm.$message({
+            message: error,
+            type: 'warning'
+          })
+        })
+      vm.singUpDialogVisible = false
+    },
+    showSingUpDialog() {
+      let vm = this
+      vm.singUp_user = {
+        loginName: '',
+        password: '',
+        password_repeat: '',
+        user_mobile: ''
+      }
+      vm.singUpDialogVisible = true
     }
   }
 }
@@ -112,6 +233,14 @@ export default {
 .layout_main {
   width: 100%;
   height: auto;
+}
+.top_line_div {
+  width: 100%;
+  height: 10px;
+  background-color: black;
+  position: fixed;
+  top: 0;
+  z-index: 9;
 }
 .layout_center {
   width: 100%;
@@ -164,8 +293,13 @@ export default {
   line-height: 30px;
   font-family: 'Microsoft YaHei';
   font-size: 20px;
+  color: lightgray;
   font-weight: bold;
   text-align: center;
+  cursor: pointer;
+}
+.SignUp_tips:hover {
+  color: black;
 }
 .el-form-item__label {
   font-size: 20px;
