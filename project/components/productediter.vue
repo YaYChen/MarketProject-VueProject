@@ -31,17 +31,30 @@
         <el-input v-model="product.name"/>
       </el-form-item>
       <el-form-item :label="$t('product.category')">
-        <el-select
-          v-model="selectValue"
-          placeholder="Category select..."
-        >
-          <el-option
-            v-for="item in selectCategories"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          />
-        </el-select>
+        <div>
+          <el-row>
+            <el-col :span="6">
+              <div>
+                <el-select
+                  v-model="selectValue"
+                  placeholder="Category select..."
+                >
+                  <el-option
+                    v-for="item in selectCategories"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="18">
+              <div
+                class="add_category_div"
+                @click="showAddCategoryDialog">Add Category</div>
+            </el-col>
+          </el-row>         
+        </div>
       </el-form-item>
       <el-form-item :label="$t('product.specification')">
         <el-input v-model="product.specification"/>
@@ -60,6 +73,29 @@
         <el-button @click="hiddenForm">{{ $t('button.cancel') }}</el-button>
       </el-form-item>
     </el-form>
+    <!--Add Category Dialog -->
+    <el-dialog
+      :visible.sync="addDialogVisible"
+      title="Add Category"
+      width="30%">
+      <el-form 
+        :model="newCategory" 
+        :rules="rules_category" >
+        <el-form-item 
+          label="Category Name" 
+          prop="categoryName">
+          <el-input v-model="newCategory.name"/>
+        </el-form-item>           
+      </el-form>
+      <span 
+        slot="footer" 
+        class="dialog-footer">
+        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button 
+          type="primary" 
+          @click="addNewCategory">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -124,53 +160,70 @@ export default {
             trigger: 'blur'
           }
         ]
+      },
+      addDialogVisible: false,
+      newCategory: {
+        name: ''
+      },
+      rules_category: {
+        name: [
+          {
+            required: true,
+            message: 'Name is required!',
+            trigger: 'blur'
+          }
+        ]
       }
     }
   },
   created() {
     let vm = this
-    let token = vm.$store.state.user.userInfo.token.token
-    if (token === undefined || token === '') {
-      vm.$message({
-        message: 'No auth',
-        type: 'warning'
-      })
-      vm.$router.push({ name: 'login' })
-    } else {
-      vm.$axios
-        .get('/p/getCategories', {
-          headers: {
-            Authorization: token
-          }
-        })
-        .then(response => {
-          vm.selectCategories = response.data
-        })
-        .catch(function(error) {
-          if (error.request.status === 401) {
-            vm.$message({
-              message: 'No auth',
-              type: 'warning'
-            })
-            vm.$router.push({ name: 'login' })
-          }
-          vm.$message({
-            message: error,
-            type: 'warning'
-          })
-        })
-      vm.orginalProduct = vm.product
-      vm.selectValue = vm.product.category.id
-      vm.imageUrl =
-        utils.getImgFilePath(vm.product.productPicture) +
-        '&userId=' +
-        vm.$store.state.user.userInfo.userId
-      vm.imgUploadPath =
-        utils.imgUploadPath + '?userId=' + vm.$store.state.user.userInfo.userId
-    }
+    vm.getAllCategories()
+    vm.orginalProduct = vm.product
+    vm.selectValue = vm.product.category.id
+    vm.imageUrl =
+      utils.getImgFilePath(vm.product.productPicture) +
+      '&userId=' +
+      vm.$store.state.user.userInfo.userId
+    vm.imgUploadPath =
+      utils.imgUploadPath + '?userId=' + vm.$store.state.user.userInfo.userId
   },
   methods: {
-    submit: function() {
+    getAllCategories() {
+      let vm = this
+      let token = vm.$store.state.user.userInfo.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
+        })
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .get('/p/getCategories', {
+            headers: {
+              Authorization: token
+            }
+          })
+          .then(response => {
+            vm.selectCategories = response.data
+          })
+          .catch(function(error) {
+            if (error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            }
+            vm.$message({
+              message: error,
+              type: 'warning'
+            })
+          })
+      }
+    },
+    submit() {
       try {
         var vm = this
         if (vm.update == true) {
@@ -290,6 +343,50 @@ export default {
     },
     handleAvatarFaile: function(err, file, fileList) {
       console.log('err: ' + err)
+    },
+    showAddCategoryDialog() {
+      let vm = this
+      vm.addDialogVisible = true
+    },
+    addNewCategory() {
+      let vm = this
+      let postData = JSON.stringify(vm.newCategory)
+      let token = vm.$store.state.user.userInfo.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
+        })
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .post('/p/insert-category', postData, {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+              Authorization: token
+            }
+          })
+          .then(response => {
+            alert(response.data.message)
+            vm.getAllCategories()
+            vm.addDialogVisible = false
+          })
+          .catch(function(error) {
+            if (error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            } else {
+              vm.$message({
+                message: error,
+                type: 'warning'
+              })
+            }
+            vm.addDialogVisible = false
+          })
+      }
     }
   }
 }
@@ -339,5 +436,15 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+.add_category_div {
+  font-family: 'Microsoft YaHei';
+  font-size: 20px;
+  text-decoration: underline;
+  color: lightgrey;
+  cursor: pointer;
+}
+.add_category_div:hover {
+  color: black;
 }
 </style>

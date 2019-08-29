@@ -131,7 +131,6 @@ export default {
   min-height: 800px;
   margin: 10px auto;
 }
-
 .input_group_div {
   width: 1000px;
   height: auto;
@@ -139,11 +138,9 @@ export default {
   border-bottom: 2px solid black;
   display: block;
 }
-
 .input_div {
   margin: 5px 0 5px 0;
 }
-
 .product_list_div {
   width: 1000px;
   height: auto;
