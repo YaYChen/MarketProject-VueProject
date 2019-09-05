@@ -51,7 +51,7 @@
             <el-col :span="18">
               <div
                 class="add_category_div"
-                @click="showAddCategoryDialog">Add Category</div>
+                @click="showManageCategoryDialog">Manager Category</div>
             </el-col>
           </el-row>         
         </div>
@@ -73,27 +73,76 @@
         <el-button @click="hiddenForm">{{ $t('button.cancel') }}</el-button>
       </el-form-item>
     </el-form>
-    <!--Add Category Dialog -->
+    <!-- Manage Category Dialog-->
     <el-dialog
-      :visible.sync="addDialogVisible"
-      title="Add Category"
-      width="30%">
-      <el-form 
-        :model="newCategory" 
-        :rules="rules_category" >
-        <el-form-item 
-          label="Category Name" 
-          prop="categoryName">
-          <el-input v-model="newCategory.name"/>
-        </el-form-item>           
-      </el-form>
+      :visible.sync="manageDialogVisible"
+      title="Manage Category"
+      width="50%">
+      <el-button 
+        type="primary"
+        @click="showAddCategoryDialog">Add</el-button>
+      <el-table
+        :data="selectCategories"
+        style="width: 100%"
+        max-height="250">
+        <el-table-column
+          type="index"
+          width="50"/>
+        <el-table-column
+          prop="name"
+          label="名称"
+          width="120"/>
+        <el-table-column
+          fixed="right"
+          label="操作"
+          width="120">
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              size="small"
+              @click.native.prevent="deleteCategory(scope.$index)">
+              移除
+            </el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="editCategory(scope.$index)">
+              编辑
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!--Add Category Dialog -->
+      <el-dialog
+        :visible.sync="addDialogVisible"
+        title="Add Category"
+        width="30%"
+        append-to-body>
+        <el-form 
+          :model="newCategory" 
+          :rules="rules_category" >
+          <el-form-item 
+            label="Category Name" 
+            prop="categoryName">
+            <el-input v-model="newCategory.name"/>
+          </el-form-item>           
+        </el-form>
+        <span 
+          slot="footer" 
+          class="dialog-footer">
+          <el-button @click="addDialogVisible = false">取 消</el-button>
+          <el-button 
+            type="primary" 
+            @click="addNewCategory">确 定</el-button>
+        </span>
+      </el-dialog>
       <span 
         slot="footer" 
-        class="dialog-footer">
-        <el-button @click="addDialogVisible = false">取 消</el-button>
+        lass="dialog-footer">
+        <el-button @click="manageDialogVisible = false">取 消</el-button>
         <el-button 
           type="primary" 
-          @click="addNewCategory">确 定</el-button>
+          @click="manageDialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -173,7 +222,8 @@ export default {
             trigger: 'blur'
           }
         ]
-      }
+      },
+      manageDialogVisible: false
     }
   },
   created() {
@@ -191,6 +241,7 @@ export default {
   methods: {
     getAllCategories() {
       let vm = this
+      vm.selectCategories = []
       let token = vm.$store.state.user.userInfo.token.token
       if (token === undefined || token === '') {
         vm.$message({
@@ -344,6 +395,10 @@ export default {
     handleAvatarFaile: function(err, file, fileList) {
       console.log('err: ' + err)
     },
+    showManageCategoryDialog() {
+      let vm = this
+      vm.manageDialogVisible = true
+    },
     showAddCategoryDialog() {
       let vm = this
       vm.addDialogVisible = true
@@ -385,6 +440,45 @@ export default {
               })
             }
             vm.addDialogVisible = false
+          })
+      }
+    },
+    deleteCategory(index) {
+      let vm = this
+      let token = vm.$store.state.user.userInfo.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
+        })
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .get('/p/delete-category?id=' + vm.selectCategories[index].id, {
+            headers: {
+              Authorization: token
+            }
+          })
+          .then(response => {
+            vm.selectCategories.splice(index, 1)
+            vm.$message({
+              message: response.data.message,
+              type: 'success'
+            })
+          })
+          .catch(function(error) {
+            if (error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            } else {
+              vm.$message({
+                message: error,
+                type: 'warning'
+              })
+            }
           })
       }
     }

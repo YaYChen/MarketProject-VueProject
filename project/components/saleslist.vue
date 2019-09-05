@@ -247,6 +247,7 @@ export default {
     },
     getBoardList() {
       let vm = this
+      vm.boardlist = []
       let token = vm.$store.state.user.userInfo.token.token
       if (token === undefined || token === '') {
         vm.$message({

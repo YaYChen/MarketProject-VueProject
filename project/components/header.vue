@@ -228,5 +228,6 @@ export default {
 .header_login {
   height: 70px;
   line-height: 70px;
+  cursor: pointer;
 }
 </style>
