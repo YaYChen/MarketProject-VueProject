@@ -86,7 +86,7 @@
           label="User Mobile" 
           prop="user_mobile">
           <el-input
-            v-model="singUp_user.user_mobile"/>
+            v-model="singUp_user.userMobile"/>
         </el-form-item>              
       </el-form>
       <span 
@@ -130,7 +130,7 @@ export default {
         userName: '',
         password: '',
         password_repeat: '',
-        user_mobile: ''
+        userMobile: ''
       },
       rules_singUp: {
         loginName: [
@@ -149,7 +149,7 @@ export default {
           { required: true, message: '请输入登陆密码', trigger: 'blur' },
           { min: 8, message: '长度大于 8 个字符', trigger: 'blur' }
         ],
-        user_mobile: [
+        userMobile: [
           { required: true, message: '请输入用户手机号', trigger: 'blur' }
         ]
       }
@@ -221,7 +221,7 @@ export default {
         loginName: '',
         password: '',
         password_repeat: '',
-        user_mobile: ''
+        userMobile: ''
       }
       vm.singUpDialogVisible = true
     }

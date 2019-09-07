@@ -71,13 +71,84 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="a">Sing Out</el-dropdown-item>
-                <el-dropdown-item command="b">Detial</el-dropdown-item>
+                <el-dropdown-item command="b">Details</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
         </el-col>
       </el-row>
     </div>
+    <el-dialog
+      :visible.sync="detailDialogVisible"
+      title="Detail"
+      width="50%"
+      append-to-body>
+      <div>
+        <div class="detail_title_div">User Info</div>
+        <div class="user_detail_div">Login Name: {{ userInfo.loginName }}</div>
+        <div class="user_detail_div">User Name: {{ userInfo.userName }}</div>
+        <div class="user_detail_div">Mobile: {{ userInfo.userMobile }}</div>
+        <div class="user_detail_div">Created Time: {{ userInfo.createdTime }}</div>
+        <div class="detail_edit_div">
+          <el-button 
+            type="primary" 
+            @click="showEditerDialog">Edit</el-button>
+        </div>
+        <div>
+          <div class="detail_title_div">Logoin Heistories: </div>
+          <div class="time_line_div">
+            <el-timeline>
+              <el-timeline-item
+                v-for="(activity, index) in activities"
+                :key="index"
+                :icon="activity.icon"
+                :type="activity.type"
+                :color="activity.color"
+                :size="activity.size"
+                :timestamp="activity.timestamp">
+                {{ activity.content }}
+              </el-timeline-item>
+            </el-timeline>
+          </div>
+        </div>
+      </div>
+      <el-dialog
+        :visible.sync="editDialogVisible"
+        width="30%"
+        title="Editer"
+        append-to-body>
+        <el-form 
+          :model="userInfoEdit" 
+          :rules="rules_userInfo" >
+          <el-form-item 
+            label="User Name" 
+            prop="userName">
+            <el-input v-model="userInfoEdit.userName"/>
+          </el-form-item>
+          <el-form-item 
+            label="User Mobile" 
+            prop="user_mobile">
+            <el-input
+              v-model="userInfoEdit.userMobile"/>
+          </el-form-item>              
+        </el-form>
+        <span 
+          slot="footer" 
+          class="dialog-footer">
+          <el-button @click="editDialogVisible = false">取 消</el-button>
+          <el-button 
+            type="primary" 
+            @click="updateUserInfo">确 定</el-button>
+        </span>
+      </el-dialog>
+      <span 
+        slot="footer" 
+        class="dialog-footer">
+        <el-button 
+          type="primary" 
+          @click="detailDialogVisible = false">隐 藏</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -97,8 +168,27 @@ export default {
         userId: '',
         userName: ''
       },
+      userInfo: {
+        loginName: '',
+        userName: '',
+        userMobile: '',
+        timestamp: ''
+      },
       loginIn: false,
-      loginOut: true
+      loginOut: true,
+      detailDialogVisible: false,
+      activities: [],
+      editDialogVisible: false,
+      userInfoEdit: {},
+      rules_userInfo: {
+        userName: [
+          { required: true, message: '请输入用户名称', trigger: 'blur' },
+          { min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur' }
+        ],
+        userMobile: [
+          { required: true, message: '请输入用户手机号', trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
@@ -156,7 +246,7 @@ export default {
           this.signOut()
           break
         case 'b':
-          this.showDetial()
+          this.showdetail()
           break
         default:
           break
@@ -176,7 +266,144 @@ export default {
       vm.loginIn = false
       vm.loginOut = true
     },
-    showDetial() {}
+    showdetail() {
+      let vm = this
+      vm.getUserInfo()
+    },
+    getUserInfo() {
+      let vm = this
+      let token = vm.$store.state.user.userInfo.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
+        })
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .get('/p/user-detail', {
+            headers: {
+              Authorization: token
+            }
+          })
+          .then(response => {
+            let data = response.data
+            console.log(response)
+            vm.userInfo = {
+              loginName: data.loginName,
+              userName: data.userName,
+              userMobile: data.userMobile,
+              createdTime: data.genTime
+            }
+            vm.getUserHistories()
+          })
+          .catch(error => {
+            if (error.request && error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            } else {
+              vm.$message({
+                message: error,
+                type: 'warning'
+              })
+            }
+          })
+      }
+    },
+    getUserHistories() {
+      let vm = this
+      vm.activities = []
+      let token = vm.$store.state.user.userInfo.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
+        })
+        vm.$router.push({ name: 'login' })
+      } else {
+        vm.$axios
+          .get('/p/login-histories', {
+            headers: {
+              Authorization: token
+            }
+          })
+          .then(response => {
+            let data = response.data
+            console.log(response)
+            vm.activities = []
+            data.forEach(element => {
+              let item = {
+                content: 'Login',
+                timestamp: element.loginDate
+              }
+              vm.activities.push(item)
+            })
+            vm.activities[0].size = 'large'
+            vm.activities[0].color = '#0bbd87'
+            vm.detailDialogVisible = true
+          })
+          .catch(error => {
+            if (error.request && error.request.status === 401) {
+              vm.$message({
+                message: 'No auth',
+                type: 'warning'
+              })
+              vm.$router.push({ name: 'login' })
+            } else {
+              vm.$message({
+                message: error,
+                type: 'warning'
+              })
+            }
+          })
+      }
+    },
+    showEditerDialog() {
+      let vm = this
+      vm.userInfoEdit = {
+        userName: vm.userInfo.userName,
+        userMobile: vm.userInfo.userMobile
+      }
+      vm.editDialogVisible = true
+    },
+    updateUserInfo() {
+      let vm = this
+      let token = vm.$store.state.user.userInfo.token.token
+      if (token === undefined || token === '') {
+        vm.$message({
+          message: 'No auth',
+          type: 'warning'
+        })
+        vm.$router.push({ name: 'login' })
+      } else {
+        let postData = JSON.stringify(vm.userInfoEdit)
+        vm.$axios
+          .post('/p/update-user-detail', postData, {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+              Authorization: token
+            }
+          })
+          .then(response => {
+            if (response.data.message === 'Success!') {
+              alert(response.data.message)
+              vm.getUserInfo()
+            } else {
+              alert(response.data.message)
+            }
+            vm.editDialogVisible = false
+          })
+          .catch(function(error) {
+            vm.$message({
+              message: error,
+              type: 'warning'
+            })
+          })
+      }
+    }
   }
 }
 </script>
@@ -229,5 +456,31 @@ export default {
   height: 70px;
   line-height: 70px;
   cursor: pointer;
+}
+.detail_title_div {
+  font-family: 'Microsoft YaHei';
+  font-size: 25px;
+  line-height: 30px;
+  height: 30px;
+  border-left: 2px solid black;
+  padding-left: 10px;
+  color: black;
+}
+.user_detail_div {
+  margin: 10px;
+  font-family: 'Microsoft YaHei';
+  font-size: 20px;
+  line-height: 30px;
+  height: 30px;
+}
+.time_line_div {
+  margin-top: 5px;
+  padding: 10px;
+  height: 300px;
+  overflow-y: auto;
+}
+.detail_edit_div {
+  text-align: right;
+  padding-right: 10px;
 }
 </style>
