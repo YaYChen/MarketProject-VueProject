@@ -59,7 +59,7 @@
           <div 
             v-show="loginOut" 
             class="header_login">
-            <a @click="signIn">Sign In</a>
+            <a @click="signIn">{{ $t('login.signIn') }}</a>
           </div>
           <div 
             v-show="loginIn" 
@@ -70,8 +70,8 @@
                 <i class="el-icon-arrow-down el-icon--right"/>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="a">Sing Out</el-dropdown-item>
-                <el-dropdown-item command="b">Details</el-dropdown-item>
+                <el-dropdown-item command="a">{{ $t('login.signOut') }}</el-dropdown-item>
+                <el-dropdown-item command="b">{{ $t('login.details') }}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -80,22 +80,22 @@
     </div>
     <el-dialog
       :visible.sync="detailDialogVisible"
-      title="Detail"
+      :title="$t('login.details')"
       width="50%"
       append-to-body>
       <div>
-        <div class="detail_title_div">User Info</div>
-        <div class="user_detail_div">Login Name: {{ userInfo.loginName }}</div>
-        <div class="user_detail_div">User Name: {{ userInfo.userName }}</div>
-        <div class="user_detail_div">Mobile: {{ userInfo.userMobile }}</div>
-        <div class="user_detail_div">Created Time: {{ userInfo.createdTime }}</div>
+        <div class="detail_title_div">{{ $t('user.userInfo') }}</div>
+        <div class="user_detail_div">{{ $t('user.loginName') }}: {{ userInfo.loginName }}</div>
+        <div class="user_detail_div">{{ $t('user.userName') }}: {{ userInfo.userName }}</div>
+        <div class="user_detail_div">{{ $t('user.mobile') }}: {{ userInfo.userMobile }}</div>
+        <div class="user_detail_div">{{ $t('user.createdTime') }}: {{ userInfo.createdTime }}</div>
         <div class="detail_edit_div">
           <el-button 
             type="primary" 
-            @click="showEditerDialog">Edit</el-button>
+            @click="showEditerDialog">{{ $t('button.edit') }}</el-button>
         </div>
         <div>
-          <div class="detail_title_div">Logoin Heistories: </div>
+          <div class="detail_title_div">{{ $t('login.logoinHeistories') }}: </div>
           <div class="time_line_div">
             <el-timeline>
               <el-timeline-item
@@ -114,19 +114,19 @@
       </div>
       <el-dialog
         :visible.sync="editDialogVisible"
+        :title="$t('dialog.titleEdit')"
         width="30%"
-        title="Editer"
         append-to-body>
         <el-form 
           :model="userInfoEdit" 
           :rules="rules_userInfo" >
           <el-form-item 
-            label="User Name" 
+            :label="$t('user.userName')" 
             prop="userName">
             <el-input v-model="userInfoEdit.userName"/>
           </el-form-item>
           <el-form-item 
-            label="User Mobile" 
+            :label="$t('user.mobile')" 
             prop="user_mobile">
             <el-input
               v-model="userInfoEdit.userMobile"/>
@@ -135,10 +135,10 @@
         <span 
           slot="footer" 
           class="dialog-footer">
-          <el-button @click="editDialogVisible = false">取 消</el-button>
+          <el-button @click="editDialogVisible = false">{{ $t('button.cancel') }}</el-button>
           <el-button 
             type="primary" 
-            @click="updateUserInfo">确 定</el-button>
+            @click="updateUserInfo">{{ $t('button.confirm') }}</el-button>
         </span>
       </el-dialog>
       <span 
@@ -146,7 +146,7 @@
         class="dialog-footer">
         <el-button 
           type="primary" 
-          @click="detailDialogVisible = false">隐 藏</el-button>
+          @click="detailDialogVisible = false">{{ $t('button.heidden') }}</el-button>
       </span>
     </el-dialog>
   </div>

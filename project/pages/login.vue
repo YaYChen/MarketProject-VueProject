@@ -7,7 +7,7 @@
           Market
         </div>
         <div class="login_Description">
-          Sign in to your account
+          {{ $t('login.signInTitle') }}
         </div>
         <div class="login_continer">
           <div class="login_div">
@@ -15,12 +15,12 @@
               :model="login_user" 
               :rules="rules" >
               <el-form-item 
-                label="User Name" 
+                :label="$t('user.loginName')" 
                 prop="loginName">
                 <el-input v-model="login_user.loginName"/>
               </el-form-item>
               <el-form-item 
-                label="Password" 
+                :label="$t('user.password')" 
                 prop="password">
                 <el-input
                   v-model="login_user.password"
@@ -31,19 +31,19 @@
                   class="login_button"
                   type="primary" 
                   round
-                  @click="loginIn">Sign In</el-button>
+                  @click="loginIn">{{ $t('button.login') }}</el-button>
               </el-form-item>
               <el-form-item>
                 <div 
                   class="SignUp_tips"
                   @click="showSingUpDialog">
-                  ——Don't have an account?——
+                  ——{{ $t('login.singUpTitle') }}——
                 </div>
               </el-form-item>
               <el-form-item>
                 <el-button
                   class="login_button" 
-                  round>Create a new account </el-button>
+                  round>{{ $t('login.loginAsManager') }}</el-button>
               </el-form-item>
             </el-form>
           </div>          
@@ -53,50 +53,50 @@
     <app-footer/>
     <el-dialog
       :visible.sync="singUpDialogVisible"
-      title="注册"
+      :title="$t('dialog.signUp')"
       width="30%">
       <el-form 
         :model="singUp_user" 
         :rules="rules_singUp" >
         <el-form-item 
-          label="Login Name" 
+          :label="$t('user.loginName')" 
           prop="loginName">
           <el-input v-model="singUp_user.loginName"/>
         </el-form-item>
         <el-form-item 
-          label="User Name" 
+          :label="$t('user.userName')" 
           prop="userName">
           <el-input v-model="singUp_user.userName"/>
         </el-form-item>
         <el-form-item 
-          label="Password" 
+          :label="$t('user.password')" 
           prop="password">
           <el-input
             v-model="singUp_user.password"
             type="password"/>
         </el-form-item>
         <el-form-item 
-          label="Repeat Password" 
+          :label="$t('user.passwordAgain')" 
           prop="password_repeat">
           <el-input
             v-model="singUp_user.password_repeat"
             type="password"/>
         </el-form-item>
         <el-form-item 
-          label="User Mobile" 
+          :label="$t('user.mobile')" 
           prop="user_mobile">
           <el-input
             v-model="singUp_user.userMobile"/>
-        </el-form-item>              
+        </el-form-item>
       </el-form>
       <span 
         slot="footer" 
         class="dialog-footer">
         <el-button 
-          @click="singUpDialogVisible = false">取 消</el-button>
+          @click="singUpDialogVisible = false">{{ $t('button.cancel') }}</el-button>
         <el-button 
           type="primary" 
-          @click="singUp">确 定</el-button>
+          @click="singUp">{{ $t('button.confirm') }}</el-button>
       </span>
     </el-dialog>
   </div>

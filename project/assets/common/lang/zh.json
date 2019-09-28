@@ -19,7 +19,11 @@
     "confirm": "确认",
     "settlement": "结算",
     "add":"添加",
-    "inquire": "查询"
+    "inquire": "查询",
+    "create": "创建",
+    "edit": "编辑",
+    "heidden": "隐藏",
+    "login": "登录"
   },
   "product": {
     "name": "名称",
@@ -58,7 +62,8 @@
   },
   "dialog": {
     "titleAdd": "添加",
-    "titleEdit": "编辑"
+    "titleEdit": "编辑",
+    "signUp": "注册"
   },
   "supplier": {
     "name": "姓名",
@@ -87,5 +92,23 @@
     "startPlaceholder": "开始日期",
     "endPlaceholder": "结束日期"
   },
-  "index": "序号"
+  "index": "序号",
+  "login": {
+    "signOut": "登出",
+    "signIn": "登录",
+    "details": "用户详情",
+    "signInTitle": "请使用个人账号登录",
+    "singUpTitle": "注册新帐号么?",
+    "logoinHeistories": "登录历史",
+    "loginAsManager": "管理员登录"
+  },
+  "user": {
+    "userInfo": "个人信息",
+    "loginName": "登录名",
+    "userName": "用户名",
+    "mobile": "手机号",
+    "createdTime": "创建时间",
+    "password": "密码",
+    "passwordAgain": "再次输入密码"
+  }
 }

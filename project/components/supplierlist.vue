@@ -66,7 +66,7 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
-      :title="dialogTitle"
+      :title="$t('dialog.titleAdd')"
       width="30%">
       <div>
         <div class="img_upload_box">
@@ -95,13 +95,13 @@
             :model="onEditSupplier"
             label-position="right" 
             label-width="80px">
-            <el-form-item label="Name:">
+            <el-form-item :label="$t('supplier.name')">
               <el-input v-model="onEditSupplier.name"/>
             </el-form-item>
-            <el-form-item label="Brand:">
+            <el-form-item :label="$t('supplier.brand')">
               <el-input v-model="onEditSupplier.brand"/>
             </el-form-item>
-            <el-form-item label="Phone:">
+            <el-form-item :label="$t('supplier.phone')">
               <el-input v-model="onEditSupplier.phone"/>
             </el-form-item>
           </el-form>

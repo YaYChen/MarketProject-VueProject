@@ -19,7 +19,11 @@
     "confirm": "Confirm",
     "settlement": "Settlement",
     "add":"Add",
-    "inquire": "Inquire"
+    "inquire": "Inquire",
+    "create": "Create",
+    "edit": "Edit",
+    "heidden": "Heidden",
+    "login": "Login"
   },
   "product": {
     "name": "Name",
@@ -58,7 +62,8 @@
   },
   "dialog": {
     "titleAdd": "Add",
-    "titleEdit": "Edit"
+    "titleEdit": "Edit",
+    "signUp": "SignUp"
   },
   "supplier": {
     "name": "Name",
@@ -87,5 +92,23 @@
     "startPlaceholder": "Start",
     "endPlaceholder": "End"
   },
-  "index": "Index"
+  "index": "Index",
+  "login": {
+    "signOut": "Sing Out",
+    "signIn": "Sing In",
+    "Details": "Details",
+    "signInTitle": "Sign in to your account",
+    "singUpTitle": "Don't have an account?",
+    "logoinHeistories": "Login Heistories",
+    "loginAsManager": "Login As Manager"
+  },
+  "user": {
+    "userInfo": "User Info",
+    "loginName": "Login Name",
+    "userName": "User Name",
+    "mobile": "Mobile",
+    "createdTime": "Create Time",
+    "password": "Password",
+    "passwordAgain": "Password Again"
+  }
 }
