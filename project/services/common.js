@@ -2,9 +2,9 @@ const utils = {
   //dev: http://localhost:8080
   //prod:http://101.132.123.27:8080
   getImgFilePath: function(imgName) {
-    return 'http://101.132.123.27:8080/show-img?fileName=' + imgName
+    return 'http://106.54.251.156:8000/show-img?fileName=' + imgName
   },
-  imgUploadPath: 'http://101.132.123.27:8080/upload-img',
+  imgUploadPath: 'http://106.54.251.156:8000/upload-img',
   changeDateFormat(val) {
     if (val != null) {
       var date = new Date(
