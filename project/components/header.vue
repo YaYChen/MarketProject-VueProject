@@ -8,7 +8,10 @@
           </div>
         </el-col>
         <el-col :span="14">
-          <div>
+          <div v-if="isAdmin">
+            Admin
+          </div>
+          <div v-else>
             <el-menu
               :default-active="activeIndex"
               mode="horizontal"
@@ -160,6 +163,10 @@ export default {
     activeIndex: {
       type: String,
       default: '1'
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

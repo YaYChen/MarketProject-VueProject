@@ -5,6 +5,9 @@ export default ({ app, store }) => {
     if (user !== null) {
       store.dispatch('user/addUser', user)
     }
+    if(user.userInfo.userName === 'root'){
+      next('/admin')
+    }
     if (store.state.user.userInfo !== undefined) {
       next()
     } else {
